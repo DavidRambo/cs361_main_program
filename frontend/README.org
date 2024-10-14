@@ -1,0 +1,6 @@
+* Frontend to the Wish Lists App
+
+** Acknowledgements
+
+The code structure and visual design takes as its starting point the [[React Router tutorial][https://reactrouter.com/en/main/start/tutorial]].
+
