@@ -5,7 +5,7 @@ import "./index.css";
 
 import Root, { loader as rootLoader } from "./routes/root";
 import ErrorPage from "./error-page";
-import MyWishlist from "./routes/myWishlist";
+import MyWishlist, { loader as myWishlistLoader } from "./routes/myWishlist";
 import Wishlist, { loader as wishlistLoader } from "./routes/wishlist";
 import Index from "./routes";
 
@@ -26,6 +26,7 @@ const router = createBrowserRouter([
           {
             path: "/mywishlist",
             element: <MyWishlist />,
+            loader: myWishlistLoader,
           },
           {
             path: "/wishlists/:personId",
