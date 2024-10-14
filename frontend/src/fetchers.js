@@ -6,10 +6,42 @@ const mockDB = {
     { id: 4, displayName: "Sookie" },
   ],
   wishlists: [
-    { id: 1, items: [] },
-    { id: 2, items: [] },
+    {
+      id: 1,
+      items: [
+        {
+          id: 1,
+          what: "ZSA Voyager (white, blank, pro red switches)",
+          details: "zsa.io",
+        },
+        {
+          id: 2,
+          what: "Extra long headphone cable",
+          details: "",
+        },
+      ],
+    },
+    {
+      id: 2,
+      items: [
+        {
+          id: 1,
+          what: "Aphrodite's Advent Calendar",
+          details: "",
+        },
+      ],
+    },
     { id: 3, items: [] },
-    { id: 4, items: [] },
+    {
+      id: 4,
+      items: [
+        {
+          id: 1,
+          what: "King Lou's chicken feet",
+          details: "Or similar.",
+        },
+      ],
+    },
   ],
 };
 
@@ -31,4 +63,8 @@ export async function getPeople(selfId) {
 export async function getWishlist(id) {
   const match = mockDB.wishlists.filter((wishlist) => wishlist.id === id)[0];
   return match.items;
+}
+
+export async function getMyId() {
+  return 1;
 }
