@@ -3,8 +3,10 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
-import Root from "./routes/root";
+import Root, { loader as rootLoader } from "./routes/root";
 import ErrorPage from "./error-page";
+import MyWishlist from "./routes/myWishlist";
+import Wishlist, { loader as wishlistLoader } from "./routes/wishlist";
 import Index from "./routes";
 
 const router = createBrowserRouter([
@@ -12,6 +14,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
+    loader: rootLoader,
     children: [
       {
         errorElement: <ErrorPage />,
@@ -19,6 +22,15 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Index />,
+          },
+          {
+            path: "/mywishlist",
+            element: <MyWishlist />,
+          },
+          {
+            path: "/wishlists/:personId",
+            element: <Wishlist />,
+            loader: wishlistLoader,
           },
         ],
       },

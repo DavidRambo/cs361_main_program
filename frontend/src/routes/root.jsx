@@ -1,10 +1,20 @@
 import { Link, Outlet, useLoaderData } from "react-router-dom";
+import { getPeople } from "../fetchers";
+
+export async function loader() {
+  const userId = 1; // TODO: remove hardcoded id
+  const people = await getPeople(userId);
+  return { people };
+}
+
 export default function Root() {
+  const { people } = useLoaderData();
+
   return (
     <>
       <div id="sidebar">
         <div id="my-list-button">
-          <a href={`/mywishlist/`}>My List</a>
+          <Link to={`/mywishlist/`}>My List</Link>
         </div>
 
         <div>
@@ -22,14 +32,25 @@ export default function Root() {
         </div>
 
         <nav>
-          <ul>
-            <li>
-              <a href={`/wishlists/1`}>Person 1</a>
-            </li>
-            <li>
-              <a href={`/wishlists/2`}>Person 2</a>
-            </li>
-          </ul>
+          {people.length ? (
+            <ul>
+              {people.map((person) => (
+                <li key={person.id}>
+                  <Link to={`wishlists/${person.id}`}>
+                    {person.displayName ? (
+                      <>{person.displayName}</>
+                    ) : (
+                      <i>No Name</i>
+                    )}{" "}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              <i>No wish lists to view.</i>
+            </p>
+          )}
         </nav>
 
         <div id="logout">
