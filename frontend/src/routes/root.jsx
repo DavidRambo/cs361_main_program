@@ -1,3 +1,4 @@
+import { Link, Outlet, useLoaderData } from "react-router-dom";
 export default function Root() {
   return (
     <>
@@ -40,9 +41,7 @@ export default function Root() {
         </div>
       </div>
       <div id="detail">
-        <h1>Wish Lists</h1>
-        <p>Select a person to view their wish list.</p>
-        <p>Or select "My List" to add to and edit your own.</p>
+        <Outlet />
       </div>
     </>
   );
