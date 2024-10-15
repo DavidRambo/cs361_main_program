@@ -74,3 +74,14 @@ export async function changeDisplayName(userId, newName) {
   user.displayName = newName;
 }
 
+export async function createItem(userId, what, details = "") {
+  const wishlist = mockDB.wishlists.filter(
+    (wishlist) => wishlist.id === userId,
+  )[0].items;
+
+  // Determine its id based on last id in mock db array
+  const itemId = wishlist[wishlist.length - 1].id + 1;
+
+  // Store in wishlist.
+  wishlist.push({ id: itemId, what: what, details: details });
+}
