@@ -28,13 +28,29 @@ export default function ChangeName() {
   const currentName = useLoaderData();
 
   return (
-    <>
-      <Form method="post" id="change-name-form">
-        <span>Enter your new display name:</span>
-        <input type="text" name="newName" placeholder={currentName} />
-        <button type="submit">Submit</button>
-        <button>Cancel</button>
+    <div id="change-name-form">
+      <Form method="post">
+        <div>
+          <p>Enter your new display name:</p>
+        </div>
+
+        <div>
+          <input type="text" name="newName" placeholder={currentName} />
+        </div>
+
+        <div id="form-buttons">
+          <button type="submit">Submit</button>
+
+          <button
+            onClick={(event) => {
+              event.preventDefault();
+              return redirect(`/mywishlist`);
+            }}
+          >
+            Cancel
+          </button>
+        </div>
       </Form>
-    </>
+    </div>
   );
 }
