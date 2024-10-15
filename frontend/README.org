@@ -1,5 +1,8 @@
 * Frontend to the Wish Lists App
 
+** TODO
+*** TODO Move currently logged-in user's id to local storage.
+
 ** Acknowledgements
 
 The code structure and visual design takes as its starting point the [[React Router tutorial][https://reactrouter.com/en/main/start/tutorial]].
