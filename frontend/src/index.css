@@ -309,3 +309,41 @@ i {
   padding-top: 2rem;
   text-align: center;
 }
+
+#my-wishlist-buttons {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  list-style: none;
+  margin-bottom: 2rem;
+  column-gap: 1rem;
+  row-gap: 2rem;
+}
+#my-wishlist-buttons a {
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid black;
+
+  white-space: pre;
+  padding: 0.5rem;
+  color: inherit;
+  gap: 1rem;
+}
+#my-wishlist-buttons a:hover {
+  background: #e3e3e3;
+}
+
+#change-name-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+#change-name-form form {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+#change-name-form span {
+  width: 8rem;
+}

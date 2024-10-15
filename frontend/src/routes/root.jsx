@@ -1,20 +1,21 @@
 import { Link, Outlet, useLoaderData } from "react-router-dom";
-import { getPeople } from "../fetchers";
+import { getPeople, getMyId, getDisplayName } from "../fetchers";
 
 export async function loader() {
-  const userId = 1; // TODO: remove hardcoded id
-  const people = await getPeople(userId);
-  return { people };
+  const myId = await getMyId();
+  const myself = await getDisplayName(myId);
+  const people = await getPeople(myId);
+  return { myself, people };
 }
 
 export default function Root() {
-  const { people } = useLoaderData();
+  const { myself, people } = useLoaderData();
 
   return (
     <>
       <div id="sidebar">
         <div id="my-list-button">
-          <Link to={`/mywishlist/`}>My List</Link>
+          <Link to={`/mywishlist/`}>My List — {myself}</Link>
         </div>
 
         <div>

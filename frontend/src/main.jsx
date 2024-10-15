@@ -8,6 +8,10 @@ import ErrorPage from "./error-page";
 import MyWishlist, { loader as myWishlistLoader } from "./routes/myWishlist";
 import Wishlist, { loader as wishlistLoader } from "./routes/wishlist";
 import Index from "./routes";
+import ChangeName, {
+  loader as changeNameLoader,
+  action as changeNameAction,
+} from "./routes/changeName";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +31,18 @@ const router = createBrowserRouter([
             path: "/mywishlist",
             element: <MyWishlist />,
             loader: myWishlistLoader,
+          },
+          {
+            path: "/mywishlist/add",
+          },
+          {
+            path: "/mywishlist/:itemId/edit",
+          },
+          {
+            path: "/mywishlist/change-name",
+            element: <ChangeName />,
+            loader: changeNameLoader,
+            action: changeNameAction,
           },
           {
             path: "/wishlists/:personId",

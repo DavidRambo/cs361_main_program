@@ -1,4 +1,4 @@
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, Link, useLoaderData } from "react-router-dom";
 
 import MyItem from "../components/myItem";
 
@@ -16,6 +16,16 @@ export default function MyWishlist() {
   return (
     <>
       <h1>My Wish List</h1>
+
+      <ul id="my-wishlist-buttons">
+        <li>
+          <Link to={`/mywishlist/change-name`}>Change your name</Link>
+        </li>
+        <li>
+          <Link to={`/mywishlist/add`}>Add to your list</Link>
+        </li>
+      </ul>
+
       <ul>
         {items.map((item) => (
           <MyItem key={item.id} what={item.what} details={item.details} />

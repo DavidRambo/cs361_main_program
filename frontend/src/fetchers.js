@@ -68,3 +68,9 @@ export async function getWishlist(id) {
 export async function getMyId() {
   return 1;
 }
+
+export async function changeDisplayName(userId, newName) {
+  const user = mockDB.people.filter((person) => person.id === userId)[0];
+  user.displayName = newName;
+}
+
