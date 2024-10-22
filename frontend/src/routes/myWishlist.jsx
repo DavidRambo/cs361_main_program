@@ -28,7 +28,7 @@ export default function MyWishlist() {
 
       <ul>
         {items.map((item) => (
-          <MyItem key={item.id} what={item.what} details={item.details} />
+          <MyItem key={item.id} item={item} />
         ))}
       </ul>
     </>

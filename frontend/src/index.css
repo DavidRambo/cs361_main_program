@@ -251,6 +251,11 @@ i {
   line-height: 1;
 }
 
+h1,
+h2 {
+  text-align: center;
+}
+
 #my-list-button {
   margin: 0.25rem 0;
 }
@@ -341,8 +346,19 @@ i {
 #change-name-form * {
   margin-bottom: 1rem;
 }
-#change-name-form input {
+
+input,
+textarea {
   width: 100%;
+}
+
+textarea {
+  white-space: pre-line;
+}
+
+#item-form {
+  max-width: 500px;
+  min-width: 200px;
 }
 
 /* "Submit" and "Cancel" buttons associated with add and edit forms. */
@@ -352,5 +368,94 @@ i {
   justify-content: space-between;
 
   width: 100%;
-  /* max-width: 30rem; */
+  margin-top: 1rem;
+}
+
+#delete-button-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 2rem;
+}
+#delete-button {
+  color: red;
+}
+
+/* 
+* Wish List List Items 
+* */
+#wish-list-item {
+  list-style: none;
+  display: grid;
+  max-width: 800px;
+  border-bottom: 1px gray dotted;
+}
+#wish-list-main-content {
+  display: flex;
+  justify-content: space-between;
+}
+#wish-list-item * {
+  margin: 4px;
+  align-content: center;
+}
+
+#list-what {
+  flex-grow: 3;
+}
+
+#list-button-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+#list-details-button {
+  width: 8rem;
+}
+#list-edit-button {
+  width: 4rem;
+}
+
+#list-link {
+  padding: 0 4px;
+}
+
+.buttonLink {
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: inherit;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  box-shadow:
+    0 0px 1px hsla(0, 0%, 0%, 0.2),
+    0 1px 2px hsla(0, 0%, 0%, 0.2);
+  background-color: white;
+  line-height: 1.5;
+  margin: 0;
+  color: #3992ff;
+  font-weight: 500;
+}
+.buttonLink:hover {
+  box-shadow:
+    0 0px 1px hsla(0, 0%, 0%, 0.6),
+    0 1px 2px hsla(0, 0%, 0%, 0.2);
+}
+
+.buttonLink:active {
+  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.4);
+  transform: translateY(1px);
+}
+
+.noDetails {
+  color: gray;
+  pointer-events: none;
+  width: 8rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.revealed {
+  display: block;
+  padding: 0 4px;
 }

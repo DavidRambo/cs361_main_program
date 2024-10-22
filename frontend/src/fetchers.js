@@ -11,12 +11,14 @@ const mockDB = {
       items: [
         {
           id: 1,
-          what: "ZSA Voyager (white, blank, pro red switches)",
-          details: "zsa.io",
+          what: "ZSA Voyager ",
+          link: "zsa.io",
+          details: "white, blank, pro red switches",
         },
         {
           id: 2,
           what: "Extra long headphone cable",
+          link: "",
           details: "",
         },
       ],
@@ -27,6 +29,7 @@ const mockDB = {
         {
           id: 1,
           what: "Aphrodite's Advent Calendar",
+          link: "",
           details: "",
         },
       ],
@@ -38,6 +41,7 @@ const mockDB = {
         {
           id: 1,
           what: "King Lou's chicken feet",
+          link: "",
           details: "Or similar.",
         },
       ],
@@ -65,8 +69,26 @@ export async function getWishlist(id) {
   return match.items;
 }
 
+export async function getItem(userId, itemId) {
+  const allItems = await getWishlist(parseInt(userId));
+  const match = allItems.filter((item) => item.id === parseInt(itemId))[0];
+  // const match = mockDB.wishlists
+  //   .filter((wishlist) => wishlist.id === userId)[0]
+  //   .items.filter((item) => item.id === itemId)[0];
+  return match ?? null;
+}
+
 export async function getMyId() {
   return 1;
+}
+
+export async function nameIsUnique(newName) {
+  for (const person of mockDB.people) {
+    if (newName === person.displayName) {
+      return false;
+    }
+  }
+  return true;
 }
 
 export async function changeDisplayName(userId, newName) {
@@ -74,7 +96,7 @@ export async function changeDisplayName(userId, newName) {
   user.displayName = newName;
 }
 
-export async function createItem(userId, what, details = "") {
+export function createItem(userId, what, details = "") {
   const wishlist = mockDB.wishlists.filter(
     (wishlist) => wishlist.id === userId,
   )[0].items;
@@ -84,4 +106,12 @@ export async function createItem(userId, what, details = "") {
 
   // Store in wishlist.
   wishlist.push({ id: itemId, what: what, details: details });
+}
+
+export async function editItem(userId, itemId, updates) {
+  const item = getItem(userId, itemId);
+  // FIX: Won't mutate object in the way that changeDisplayName does.
+  // item.what = updates.what;
+  // item.details = updates.details;
+  Object.assign(item, updates);
 }

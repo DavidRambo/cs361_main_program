@@ -13,6 +13,10 @@ import ChangeName, {
   action as changeNameAction,
 } from "./routes/changeName";
 import AddItem, { action as addItemAction } from "./routes/addItem";
+import EditItem, {
+  action as editItemAction,
+  loader as editItemLoader,
+} from "./routes/editItem";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +43,10 @@ const router = createBrowserRouter([
             action: addItemAction,
           },
           {
-            path: "/mywishlist/:itemId/edit",
+            path: "/mywishlist/edit/:itemId",
+            element: <EditItem />,
+            loader: editItemLoader,
+            action: editItemAction,
           },
           {
             path: "/mywishlist/change-name",
