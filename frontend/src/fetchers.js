@@ -1,3 +1,4 @@
+// Two main sections: people and wishlists. These are paired by id.
 const mockDB = {
   people: [
     { id: 1, displayName: "David" },
@@ -14,12 +15,16 @@ const mockDB = {
           what: "ZSA Voyager ",
           link: "zsa.io",
           details: "white, blank, pro red switches",
+          marked: false,
+          markedBy: 0,
         },
         {
           id: 2,
           what: "Extra long headphone cable",
           link: "",
           details: "",
+          marked: false,
+          markedBy: 0,
         },
       ],
     },
@@ -31,10 +36,24 @@ const mockDB = {
           what: "Aphrodite's Advent Calendar",
           link: "",
           details: "",
+          marked: true,
+          markedBy: 2,
         },
       ],
     },
-    { id: 3, items: [] },
+    {
+      id: 3,
+      items: [
+        {
+          id: 3,
+          what: "King Lou's Duck Necks",
+          link: "",
+          details: "Multiple boxes!",
+          marked: true,
+          markedBy: 1,
+        },
+      ],
+    },
     {
       id: 4,
       items: [
@@ -43,6 +62,8 @@ const mockDB = {
           what: "King Lou's chicken feet",
           link: "",
           details: "Or similar.",
+          marked: false,
+          markedBy: 0,
         },
       ],
     },
@@ -64,8 +85,10 @@ export async function getPeople(selfId) {
   return mockDB.people.filter((person) => person.id != selfId);
 }
 
-export async function getWishlist(id) {
-  const match = mockDB.wishlists.filter((wishlist) => wishlist.id === id)[0];
+export async function getWishlist(personId) {
+  const match = mockDB.wishlists.filter(
+    (wishlist) => wishlist.id === personId,
+  )[0];
   return match.items;
 }
 
@@ -105,7 +128,13 @@ export function createItem(userId, what, details = "") {
   const itemId = wishlist[wishlist.length - 1].id + 1;
 
   // Store in wishlist.
-  wishlist.push({ id: itemId, what: what, details: details });
+  wishlist.push({
+    id: itemId,
+    what: what,
+    details: details,
+    marked: false,
+    markedBy: 0,
+  });
 }
 
 export async function editItem(userId, itemId, updates) {
@@ -114,4 +143,18 @@ export async function editItem(userId, itemId, updates) {
   // item.what = updates.what;
   // item.details = updates.details;
   Object.assign(item, updates);
+}
+
+export async function markItem(isMarked, personId, itemId, userId) {
+  const item = await getItem(parseInt(personId), parseInt(itemId));
+
+  if (isMarked) {
+    // Update item to be marked by the current user.
+    item.marked = true;
+    item.markedBy = userId;
+  } else {
+    // Update the item to be no longer marked.
+    item.marked = false;
+    item.markedBy = 0;
+  }
 }

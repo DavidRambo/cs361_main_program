@@ -399,6 +399,16 @@ textarea {
   align-content: center;
 }
 
+#mark-container {
+  margin: 0.5rem;
+}
+
+.marked {
+  text-decoration-line: line-through;
+  text-decoration-thickness: 1px;
+  color: gray;
+}
+
 #list-what {
   flex-grow: 3;
 }
