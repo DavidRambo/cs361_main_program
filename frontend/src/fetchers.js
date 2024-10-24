@@ -139,7 +139,8 @@ export async function getMyId() {
 }
 
 export async function nameIsUnique(newName) {
-  for (const person of mockDB.people) {
+  const people = await getPeopleData();
+  for (const person of people) {
     if (newName === person.displayName) {
       return false;
     }
@@ -148,8 +149,10 @@ export async function nameIsUnique(newName) {
 }
 
 export async function changeDisplayName(userId, newName) {
-  const user = mockDB.people.filter((person) => person.id === userId)[0];
+  const people = await getPeopleData();
+  const user = people.filter((person) => person.id === userId)[0];
   user.displayName = newName;
+  writePeopleData(people);
 }
 
 export function createItem(userId, what, details = "") {
