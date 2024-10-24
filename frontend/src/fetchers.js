@@ -1,3 +1,4 @@
+// model data in JSON for prepopulating localStorage.
 // Two main sections: people and wishlists. These are paired by id.
 const mockDB = {
   people: [
@@ -69,6 +70,16 @@ const mockDB = {
     },
   ],
 };
+
+// Prepopulate localStorage with people and wishlists data if they do not exist.
+export function buildLocalData() {
+  if (!localStorage.getItem("PeopleData")) {
+    localStorage.setItem("PeopleData", JSON.stringify(mockDB.people));
+  }
+  if (!localStorage.getItem("WishlistsData")) {
+    localStorage.setItem("WishlistsData", JSON.stringify(mockDB.wishlists));
+  }
+}
 
 export async function getDisplayName(id) {
   const match = mockDB.people.filter((person) => person.id === id)[0];

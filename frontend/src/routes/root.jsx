@@ -1,7 +1,13 @@
 import { Link, Outlet, useLoaderData } from "react-router-dom";
-import { getPeople, getMyId, getDisplayName } from "../fetchers";
+import {
+  buildLocalData,
+  getPeople,
+  getMyId,
+  getDisplayName,
+} from "../fetchers";
 
 export async function loader() {
+  buildLocalData();
   const myId = await getMyId();
   const myself = await getDisplayName(myId);
   const people = await getPeople(myId);
