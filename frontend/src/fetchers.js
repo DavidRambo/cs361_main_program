@@ -106,7 +106,8 @@ async function writeWishlistsData(data) {
 }
 
 export async function getDisplayName(id) {
-  const match = mockDB.people.filter((person) => person.id === id)[0];
+  const people = await getPeopleData();
+  const match = people.filter((person) => person.id === id)[0];
   return match.displayName;
 }
 
