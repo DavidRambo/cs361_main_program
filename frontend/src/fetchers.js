@@ -131,9 +131,6 @@ export async function getWishlist(personId) {
 export async function getItem(userId, itemId) {
   const allItems = await getWishlist(parseInt(userId));
   const match = allItems.filter((item) => item.id === parseInt(itemId))[0];
-  // const match = mockDB.wishlists
-  //   .filter((wishlist) => wishlist.id === userId)[0]
-  //   .items.filter((item) => item.id === itemId)[0];
   return match ?? null;
 }
 
