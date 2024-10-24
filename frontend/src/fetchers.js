@@ -123,9 +123,8 @@ export async function getPeople(selfId) {
 }
 
 export async function getWishlist(personId) {
-  const match = mockDB.wishlists.filter(
-    (wishlist) => wishlist.id === personId,
-  )[0];
+  const wishlists = await getWishlistsData();
+  const match = wishlists.filter((wishlist) => wishlist.id === personId)[0];
   return match.items;
 }
 
