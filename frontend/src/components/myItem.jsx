@@ -45,17 +45,21 @@ export default function MyItem({ item }) {
         </div>
       </div>
 
-      <div id="list-link">
-        {validateURL(item.link) ? (
-          <a href={item.link} target="_blank">
-            {item.link}
-          </a>
-        ) : (
-          <a href={"https://" + item.link} target="_blank">
-            {item.link}
-          </a>
-        )}
-      </div>
+      {item.link === "" ? (
+        <></>
+      ) : (
+        <div id="list-link">
+          {validateURL(item.link) ? (
+            <a href={item.link} target="_blank">
+              Product Page
+            </a>
+          ) : (
+            <a href={"https://" + item.link} target="_blank">
+              Product Page
+            </a>
+          )}
+        </div>
+      )}
 
       <div className={hidden ? "hidden" : "revealed"}>
         {item.details.split("\n").map((portion, i) => {

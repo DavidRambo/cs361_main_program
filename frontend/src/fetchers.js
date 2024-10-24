@@ -74,9 +74,11 @@ const mockDB = {
 // Prepopulate localStorage with people and wishlists data if they do not exist.
 export function buildLocalData() {
   if (!localStorage.getItem("PeopleData")) {
+    console.log(">>> Loading mock user data...");
     localStorage.setItem("PeopleData", JSON.stringify(mockDB.people));
   }
   if (!localStorage.getItem("WishlistsData")) {
+    console.log(">>> Loading mock wishlist data...");
     localStorage.setItem("WishlistsData", JSON.stringify(mockDB.wishlists));
   }
 }
@@ -124,6 +126,7 @@ export async function getPeople(selfId) {
 
 export async function getWishlist(personId) {
   const wishlists = await getWishlistsData();
+  console.log(">>> ", wishlists);
   const match = wishlists.filter((wishlist) => wishlist.id === personId)[0];
   return match.items;
 }
@@ -155,10 +158,10 @@ export async function changeDisplayName(userId, newName) {
   writePeopleData(people);
 }
 
-export function createItem(userId, what, details = "") {
-  const wishlist = mockDB.wishlists.filter(
-    (wishlist) => wishlist.id === userId,
-  )[0].items;
+export async function createItem(userId, what, itemLink, details = "") {
+  const allWishlists = await getWishlistsData();
+  const wishlist = allWishlists.filter((wishlist) => wishlist.id === userId)[0]
+    .items;
 
   // Determine its id based on last id in mock db array
   const itemId = wishlist[wishlist.length - 1].id + 1;
@@ -167,10 +170,12 @@ export function createItem(userId, what, details = "") {
   wishlist.push({
     id: itemId,
     what: what,
+    link: itemLink,
     details: details,
     marked: false,
     markedBy: 0,
   });
+  writeWishlistsData(allWishlists);
 }
 
 export async function editItem(userId, itemId, updates) {

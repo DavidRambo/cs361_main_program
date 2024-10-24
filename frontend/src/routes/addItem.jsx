@@ -1,15 +1,6 @@
 import React from "react";
 import { Form, redirect } from "react-router-dom";
 
-/* 
- *
-    onKeyDown={(event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-      }
-    }}
-*/
-
 import { createItem, getMyId } from "../fetchers";
 
 export async function action({ request }) {
@@ -22,6 +13,7 @@ export async function action({ request }) {
   }
 
   const what = formData.get("what");
+  const itemLink = formData.get("itemLink");
   const details = formData.get("details");
 
   if (what === "") {
@@ -29,7 +21,7 @@ export async function action({ request }) {
     return redirect(`/mywishlist/add`);
   }
 
-  createItem(await getMyId(), what, details);
+  createItem(await getMyId(), what, itemLink, details);
   return redirect(`/mywishlist`);
 }
 
@@ -43,6 +35,14 @@ export default function AddItem() {
           type="text"
           name="what"
           aria-label="What is it?"
+          className="itemText"
+        />
+
+        <p>Want to provide a URL to the item?</p>
+        <input
+          type="text"
+          name="itemLink"
+          aria-label="Enter a URL for the item."
           className="itemText"
         />
 
