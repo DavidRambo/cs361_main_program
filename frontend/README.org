@@ -5,5 +5,4 @@
 
 ** Acknowledgements
 
-The code structure and visual design takes as its starting point the [[React Router tutorial][https://reactrouter.com/en/main/start/tutorial]].
-
+The code structure and visual design takes as its starting point the [[https://reactrouter.com/en/main/start/tutorial][React Router tutorial]].
