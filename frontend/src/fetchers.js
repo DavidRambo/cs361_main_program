@@ -81,6 +81,30 @@ export function buildLocalData() {
   }
 }
 
+function getPeopleData() {
+  try {
+    return JSON.parse(localStorage.getItem("PeopleData"));
+  } catch (err) {
+    console.log("Failed to parse JSON: ", err);
+  }
+}
+
+async function getWishlistsData() {
+  try {
+    return JSON.parse(localStorage.getItem("WishlistsData"));
+  } catch (err) {
+    console.log("Failed to parse JSON: ", err);
+  }
+}
+
+async function writePeopleData(data) {
+  localStorage.setItem("PeopleData", JSON.stringify(data));
+}
+
+async function writeWishlistsData(data) {
+  localStorage.setItem("WishlistsData", JSON.stringify(data));
+}
+
 export async function getDisplayName(id) {
   const match = mockDB.people.filter((person) => person.id === id)[0];
   return match.displayName;
