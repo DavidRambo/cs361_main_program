@@ -118,7 +118,8 @@ export async function getDisplayName(id) {
  *   and displayName of users other than the logged-in user
  */
 export async function getPeople(selfId) {
-  return mockDB.people.filter((person) => person.id != selfId);
+  const people = await getPeopleData();
+  return people.filter((person) => person.id != selfId);
 }
 
 export async function getWishlist(personId) {
