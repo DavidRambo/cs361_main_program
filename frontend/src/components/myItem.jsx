@@ -7,6 +7,14 @@ import { Link } from "react-router-dom";
 export default function MyItem({ item }) {
   const [hidden, setHidden] = React.useState(true);
 
+  function validateURL(itemLink) {
+    if (itemLink.startsWith("https://")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <li id="wish-list-item">
       <div id="wish-list-main-content">
@@ -37,7 +45,17 @@ export default function MyItem({ item }) {
         </div>
       </div>
 
-      <div id="list-link">{item.link}</div>
+      <div id="list-link">
+        {validateURL(item.link) ? (
+          <a href={item.link} target="_blank">
+            {item.link}
+          </a>
+        ) : (
+          <a href={"https://" + item.link} target="_blank">
+            {item.link}
+          </a>
+        )}
+      </div>
 
       <div className={hidden ? "hidden" : "revealed"}>
         {item.details.split("\n").map((portion, i) => {
