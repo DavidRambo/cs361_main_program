@@ -392,6 +392,7 @@ textarea {
 }
 #wish-list-main-content {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 #wish-list-item * {
