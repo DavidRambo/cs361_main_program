@@ -61,7 +61,7 @@ const mockDB = {
         {
           id: 1,
           what: "King Lou's chicken feet",
-          link: "",
+          link: "https://kingloupets.com/collections/shop-treats/products/free-range-whole-chicken-feet",
           details: "Or similar.",
           marked: false,
           markedBy: 0,
