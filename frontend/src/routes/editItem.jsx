@@ -18,9 +18,6 @@ export async function action({ request }) {
   const intent = formData.get("intent");
   if (intent === "cancel") {
     return redirect(`/mywishlist`);
-  } else if (intent === "delete") {
-    alert("TODO: Delete item from wish list.");
-    return redirect(`/mywishlist`);
   } else {
     await editItem(updates.hiddenUserId, updates.hiddenItemId, updates);
     return redirect(`/mywishlist`);
@@ -32,88 +29,75 @@ export default function EditItem() {
   const [hidden, setHidden] = React.useState(true);
 
   return (
-    <Form method="post" id="item-form">
-      <h2>Edit Your Gift Idea</h2>
+    <div id="edit-item-component">
+      <Form method="post" id="item-form">
+        <h2>Edit Your Gift Idea</h2>
 
-      <p>What is it?</p>
-      <input
-        name="what"
-        type="text"
-        className="itemText"
-        defaultValue={item.what}
-      />
+        <p>What is it?</p>
+        <input
+          name="what"
+          type="text"
+          className="itemText"
+          defaultValue={item.what}
+        />
 
-      <p>Want to provide a URL to the item?</p>
-      <input
-        type="text"
-        name="itemLink"
-        aria-label="Enter a URL for the item."
-        className="itemText"
-        defaultValue={item.link}
-      />
+        <p>Want to provide a URL to the item?</p>
+        <input
+          type="text"
+          name="itemLink"
+          aria-label="Enter a URL for the item."
+          className="itemText"
+          defaultValue={item.link}
+        />
 
-      <p>Anything else to add?</p>
-      <textarea
-        name="details"
-        className="itemTextArea"
-        defaultValue={item.details}
-      />
+        <p>Anything else to add?</p>
+        <textarea
+          name="details"
+          className="itemTextArea"
+          defaultValue={item.details}
+        />
 
-      <input name="hiddenUserId" type="number" readOnly hidden value={userId} />
-      <input
-        name="hiddenItemId"
-        type="number"
-        readOnly
-        hidden
-        value={item.id}
-      />
+        <input
+          name="hiddenUserId"
+          type="number"
+          readOnly
+          hidden
+          value={userId}
+        />
+        <input
+          name="hiddenItemId"
+          type="number"
+          readOnly
+          hidden
+          value={item.id}
+        />
 
-      <div id="form-buttons">
-        <button type="submit" name="intent" value="submit">
-          Submit
-        </button>
+        <div id="form-buttons">
+          <button type="submit" name="intent" value="submit">
+            Submit
+          </button>
 
-        <button type="submit" name="intent" value="cancel">
-          Cancel
-        </button>
-      </div>
+          <button type="submit" name="intent" value="cancel">
+            Cancel
+          </button>
+        </div>
+      </Form>
 
       <div id="delete-button-container">
-        <button
-          id="delete-button"
-          onClick={(event) => {
-            event.preventDefault();
-            setHidden(false);
+        <Form
+          method="post"
+          action="delete"
+          onSubmit={(event) => {
+            if (!confirm("Are you sure you want to delete this item?")) {
+              event.preventDefault();
+            }
           }}
         >
-          Delete
-        </button>
+          <button type="submit" id="delete-button">
+            Delete
+          </button>
+        </Form>
       </div>
-
-      <section className={hidden ? "hidden" : "modal"}>
-        <div className="modal-container">
-          <p>Are you sure you want to delete this item?</p>
-          <div className="modal-buttons">
-            <button
-              onClick={(event) => {
-                event.preventDefault();
-                setHidden(true);
-              }}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              name="intent"
-              value="delete"
-              id="delete-button"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </section>
-      <div className={hidden ? "hidden" : "modal-overlay"}></div>
-    </Form>
+    </div>
   );
 }

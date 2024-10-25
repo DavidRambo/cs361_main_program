@@ -17,6 +17,7 @@ import EditItem, {
   action as editItemAction,
   loader as editItemLoader,
 } from "./routes/editItem";
+import { action as deleteAction } from "./routes/delete";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
             element: <EditItem />,
             loader: editItemLoader,
             action: editItemAction,
+          },
+          {
+            path: "/mywishlist/edit/:itemId/delete",
+            action: deleteAction,
           },
           {
             path: "/mywishlist/change-name",

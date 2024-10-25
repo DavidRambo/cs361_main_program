@@ -187,10 +187,9 @@ export async function editItem(userId, itemId, updates) {
 }
 
 export async function markItem(isMarked, personId, itemId, userId) {
-  const wishlists = await getWishlistsData();
-  const allItems = wishlists.filter(
-    (wishlist) => wishlist.id === parseInt(personId),
-  )[0].items;
+  const allWishlists = await getWishlistsData();
+  const allItems = allWishlists.filter((w) => w.id === parseInt(personId))[0]
+    .items;
   const item = allItems.filter((item) => item.id === parseInt(itemId))[0];
 
   if (isMarked) {
@@ -203,5 +202,21 @@ export async function markItem(isMarked, personId, itemId, userId) {
     item.markedBy = 0;
   }
 
-  writeWishlistsData(wishlists);
+  writeWishlistsData(allWishlists);
+}
+
+export async function deleteItem(itemId) {
+  const userId = await getMyId();
+
+  const allWishlists = await getWishlistsData();
+  const wishlist = allWishlists.filter((w) => w.id === userId)[0].items;
+
+  const indexToDelete = wishlist.findIndex((item) => item.id === itemId);
+
+  if (indexToDelete === -1) {
+    console.log("Failed to delete item: item now found.");
+  } else {
+    let deletedItem = wishlist.splice(indexToDelete, indexToDelete);
+    writeWishlistsData(allWishlists);
+  }
 }
