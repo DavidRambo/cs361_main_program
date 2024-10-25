@@ -126,7 +126,6 @@ export async function getPeople(selfId) {
 
 export async function getWishlist(personId) {
   const wishlists = await getWishlistsData();
-  console.log(">>> ", wishlists);
   const match = wishlists.filter((wishlist) => wishlist.id === personId)[0];
   return match.items;
 }
@@ -179,23 +178,30 @@ export async function createItem(userId, what, itemLink, details = "") {
 }
 
 export async function editItem(userId, itemId, updates) {
-  const item = getItem(userId, itemId);
-  // FIX: Won't mutate object in the way that changeDisplayName does.
-  // item.what = updates.what;
-  // item.details = updates.details;
+  const allWishlists = await getWishlistsData();
+  const wishlist = allWishlists.filter((w) => w.id === parseInt(userId))[0]
+    .items;
+  const item = wishlist.filter((item) => item.id === parseInt(itemId))[0];
   Object.assign(item, updates);
+  writeWishlistsData(allWishlists);
 }
 
 export async function markItem(isMarked, personId, itemId, userId) {
-  const item = await getItem(parseInt(personId), parseInt(itemId));
+  const wishlists = await getWishlistsData();
+  const allItems = wishlists.filter(
+    (wishlist) => wishlist.id === parseInt(personId),
+  )[0].items;
+  const item = allItems.filter((item) => item.id === parseInt(itemId))[0];
 
   if (isMarked) {
     // Update item to be marked by the current user.
     item.marked = true;
-    item.markedBy = userId;
+    item.markedBy = parseInt(userId);
   } else {
     // Update the item to be no longer marked.
     item.marked = false;
     item.markedBy = 0;
   }
+
+  writeWishlistsData(wishlists);
 }
