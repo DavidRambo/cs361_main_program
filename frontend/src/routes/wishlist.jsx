@@ -18,7 +18,7 @@ export default function Wishlist() {
   const { name, personId, items, userId } = useLoaderData();
 
   return (
-    <>
+    <div className="wishlist">
       <h1>{name}'s Wish List</h1>
       <p>To commit to giving a gift, mark the checkbox on the left.</p>
       <ul>
@@ -26,6 +26,6 @@ export default function Wishlist() {
           <Item key={item.id} item={item} personId={personId} myId={userId} />
         ))}
       </ul>
-    </>
+    </div>
   );
 }

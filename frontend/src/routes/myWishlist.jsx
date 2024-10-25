@@ -14,7 +14,7 @@ export default function MyWishlist() {
   const items = useLoaderData();
 
   return (
-    <>
+    <div className="wishlist">
       <h1>My Wish List</h1>
 
       <ul id="my-wishlist-buttons">
@@ -31,6 +31,6 @@ export default function MyWishlist() {
           <MyItem key={item.id} item={item} />
         ))}
       </ul>
-    </>
+    </div>
   );
 }
