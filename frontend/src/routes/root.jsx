@@ -1,4 +1,9 @@
-import { Link, Outlet, useLoaderData } from "react-router-dom";
+import {
+  NavLink,
+  Outlet,
+  useLoaderData,
+  useNavigation,
+} from "react-router-dom";
 import {
   buildLocalData,
   getPeople,
@@ -17,11 +22,21 @@ export async function loader() {
 export default function Root() {
   const { myself, people } = useLoaderData();
 
+  // returns current navigation state: "idle" | "submitting" | "loading"
+  const navigation = useNavigation();
+
   return (
     <>
       <div id="sidebar">
         <div id="my-list-button">
-          <Link to={`/mywishlist/`}>My List — {myself}</Link>
+          <NavLink
+            to={`/mywishlist/`}
+            className={({ isActive, isPending }) =>
+              isActive ? "active" : isPending ? "pending" : ""
+            }
+          >
+            My List — {myself}
+          </NavLink>
         </div>
 
         <div>
@@ -43,13 +58,13 @@ export default function Root() {
             <ul>
               {people.map((person) => (
                 <li key={person.id}>
-                  <Link to={`wishlists/${person.id}`}>
+                  <NavLink to={`wishlists/${person.id}`}>
                     {person.displayName ? (
                       <>{person.displayName}</>
                     ) : (
                       <i>No Name</i>
                     )}{" "}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -68,7 +83,10 @@ export default function Root() {
           </ul>
         </div>
       </div>
-      <div id="detail">
+      <div
+        id="detail"
+        className={navigation.state === "loading" ? "loading" : ""}
+      >
         <Outlet />
       </div>
     </>
