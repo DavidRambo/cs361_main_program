@@ -1,5 +1,5 @@
 import React from "react";
-import { redirect, useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { Form } from "react-router-dom";
 
 import { editItem, getItem, getMyId } from "../fetchers";
@@ -14,19 +14,13 @@ export async function action({ request }) {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
 
-  // Retrieve value field of button with name="intent".
-  const intent = formData.get("intent");
-  if (intent === "cancel") {
-    return redirect(`/mywishlist`);
-  } else {
-    await editItem(updates.hiddenUserId, updates.hiddenItemId, updates);
-    return redirect(`/mywishlist`);
-  }
+  await editItem(updates.hiddenUserId, updates.hiddenItemId, updates);
+  return redirect(`/mywishlist`);
 }
 
 export default function EditItem() {
   const { userId, item } = useLoaderData();
-  const [hidden, setHidden] = React.useState(true);
+  const navigate = useNavigate();
 
   return (
     <div id="edit-item-component">
@@ -73,11 +67,14 @@ export default function EditItem() {
         />
 
         <div id="form-buttons">
-          <button type="submit" name="intent" value="submit">
-            Submit
-          </button>
+          <button type="submit">Submit</button>
 
-          <button type="submit" name="intent" value="cancel">
+          <button
+            type="button"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
             Cancel
           </button>
         </div>

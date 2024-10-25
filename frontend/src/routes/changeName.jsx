@@ -1,4 +1,4 @@
-import { Form, redirect, useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData, useNavigate } from "react-router-dom";
 
 import {
   changeDisplayName,
@@ -16,12 +16,6 @@ export async function loader() {
 
 export async function action({ request }) {
   const formData = await request.formData(); // formData.get("newName"); etc.
-
-  // Retrieve value field of button with name="intent".
-  const intent = formData.get("intent");
-  if (intent === "cancel") {
-    return redirect(`/mywishlist`);
-  }
 
   // Turn the form data into an object and extract `newName` text input.
   const newName = Object.fromEntries(formData).newName;
@@ -41,6 +35,7 @@ export async function action({ request }) {
 
 export default function ChangeName() {
   const currentName = useLoaderData();
+  const navigate = useNavigate();
 
   return (
     <div id="change-name-form">
@@ -52,11 +47,14 @@ export default function ChangeName() {
         </div>
 
         <div id="form-buttons">
-          <button type="submit" name="intent" value="submit">
-            Submit
-          </button>
+          <button type="submit">Submit</button>
 
-          <button type="submit" name="intent" value="cancel">
+          <button
+            type="button"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
             Cancel
           </button>
         </div>

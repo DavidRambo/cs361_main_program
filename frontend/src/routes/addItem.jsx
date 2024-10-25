@@ -1,23 +1,17 @@
 import React from "react";
-import { Form, redirect } from "react-router-dom";
+import { Form, redirect, useNavigate } from "react-router-dom";
 
 import { createItem, getMyId } from "../fetchers";
 
 export async function action({ request }) {
   const formData = await request.formData();
 
-  // Retrieve value field of button with name="intent".
-  const intent = formData.get("intent");
-  if (intent === "cancel") {
-    return redirect(`/mywishlist`);
-  }
-
   const what = formData.get("what");
   const itemLink = formData.get("itemLink");
   const details = formData.get("details");
 
   if (what === "") {
-    alert("You have to ask for *something*.");
+    alert("You have to ask for something.");
     return redirect(`/mywishlist/add`);
   }
 
@@ -26,6 +20,8 @@ export async function action({ request }) {
 }
 
 export default function AddItem() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Form method="post" id="item-form">
@@ -54,11 +50,14 @@ export default function AddItem() {
         />
 
         <div id="form-buttons">
-          <button type="submit" name="intent" value="submit">
-            Submit
-          </button>
+          <button type="submit">Submit</button>
 
-          <button type="submit" name="intent" value="cancel">
+          <button
+            type="button"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
             Cancel
           </button>
         </div>
