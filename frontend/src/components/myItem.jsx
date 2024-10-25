@@ -1,19 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import ProductLink from "./productLink";
+
 /* The textarea newline trick for React is from comments to an answer on stackoverflow:
  * https://stackoverflow.com/a/36260137 */
 
 export default function MyItem({ item }) {
   const [hidden, setHidden] = React.useState(true);
-
-  function validateURL(itemLink) {
-    if (itemLink.startsWith("https://")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   return (
     <li id="wish-list-item">
@@ -45,21 +39,9 @@ export default function MyItem({ item }) {
         </div>
       </div>
 
-      {item.link === "" ? (
-        <></>
-      ) : (
-        <div id="list-link">
-          {validateURL(item.link) ? (
-            <a href={item.link} target="_blank">
-              Product Page
-            </a>
-          ) : (
-            <a href={"https://" + item.link} target="_blank">
-              Product Page
-            </a>
-          )}
-        </div>
-      )}
+      <div>
+        <ProductLink itemLink={item.link} />
+      </div>
 
       <div className={hidden ? "hidden" : "revealed"}>
         {item.details.split("\n").map((portion, i) => {

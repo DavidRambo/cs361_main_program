@@ -1,5 +1,6 @@
 import React from "react";
 
+import ProductLink from "./productLink";
 import { markItem } from "../fetchers";
 
 export default function Item({ item, personId, myId }) {
@@ -60,7 +61,9 @@ export default function Item({ item, personId, myId }) {
         </div>
       </div>
 
-      <div id="list-link">{item.link}</div>
+      <div>
+        <ProductLink itemLink={item.link} />
+      </div>
 
       <div className={hidden ? "hidden" : "revealed"}>
         {item.details.split("\n").map((portion, i) => {
