@@ -42,7 +42,7 @@ export default function AddItem() {
           className="itemText"
         />
 
-        <p>Anything else to know?</p>
+        <p>Anything else that would help the gift giver?</p>
         <textarea
           name="details"
           aria-label="Add more details here."

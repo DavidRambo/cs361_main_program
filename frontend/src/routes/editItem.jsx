@@ -44,7 +44,7 @@ export default function EditItem() {
           defaultValue={item.link}
         />
 
-        <p>Anything else to add?</p>
+        <p>Anything else that would help the gift giver?</p>
         <textarea
           name="details"
           className="itemTextArea"
@@ -85,7 +85,11 @@ export default function EditItem() {
           method="post"
           action="delete"
           onSubmit={(event) => {
-            if (!confirm("Are you sure you want to delete this item?")) {
+            if (
+              !confirm(
+                "Are you sure? This will permanently remove the item from your list.",
+              )
+            ) {
               event.preventDefault();
             }
           }}
