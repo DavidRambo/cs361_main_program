@@ -20,7 +20,11 @@ export default function Wishlist() {
   return (
     <div className="wishlist">
       <h1>{name}'s Wish List</h1>
-      <p>To commit to giving a gift, mark the checkbox on the left.</p>
+      <p>
+        To commit to giving a gift, mark the checkbox on the left. The recipient
+        won't know that they're receiving it. No one else will be able to select
+        it.
+      </p>
       <ul>
         {items.map((item) => (
           <Item key={item.id} item={item} personId={personId} myId={userId} />
