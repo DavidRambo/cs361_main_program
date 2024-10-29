@@ -1,9 +1,13 @@
+import React from "react";
 import {
+  Form,
   NavLink,
   Outlet,
   useLoaderData,
   useNavigation,
+  useSubmit,
 } from "react-router-dom";
+
 import {
   buildLocalData,
   getPeople,
@@ -11,19 +15,41 @@ import {
   getDisplayName,
 } from "../fetchers";
 
-export async function loader() {
-  buildLocalData();
+/* Loads the names of the current user and other users, which are used in the
+ * sidebar navigation links.
+ */
+export async function loader({ request }) {
+  buildLocalData(); // Prepopulate local storage for dev/demo purposes.
+
+  // Get search data.
+  const url = new URL(request.url);
+  const search = url.searchParams.get("search");
+
   const myId = await getMyId();
   const myself = await getDisplayName(myId);
-  const people = await getPeople(myId);
-  return { myself, people };
+  const people = await getPeople(myId, search);
+
+  return { myself, people, search };
 }
 
 export default function Root() {
-  const { myself, people } = useLoaderData();
+  const { myself, people, search } = useLoaderData();
 
   // returns current navigation state: "idle" | "submitting" | "loading"
   const navigation = useNavigation();
+
+  // To submit search Form on change.
+  const submit = useSubmit();
+
+  // To display a search spinner when navigating to a new URL and loading data.
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("search");
+
+  // Synchronize search field's value with url parameter.
+  React.useEffect(() => {
+    document.getElementById("search").value = search;
+  }, [search]);
 
   return (
     <>
@@ -40,17 +66,24 @@ export default function Root() {
         </div>
 
         <div>
-          <form id="search-form" role="search">
+          <Form id="search-form" role="search">
             <input
-              id="q"
+              id="search"
               aria-label="Search wish lists"
               placeholder="Search"
+              autoComplete="off"
               type="search"
-              name="q"
+              name="search"
+              defaultValue={search}
+              onChange={(event) => {
+                submit(event.currentTarget.form, {
+                  replace: !isFirstSearch, // Only replace search results in nav history.
+                });
+              }}
             />
             <div id="search-spinner" aria-hidden hidden={true} />
             <div className="sr-only" aria-live="polite"></div>
-          </form>
+          </Form>
         </div>
 
         <nav>

@@ -1,3 +1,5 @@
+import { matchSorter } from "match-sorter";
+
 // model data in JSON for prepopulating localStorage.
 // Two main sections: people and wishlists. These are paired by id.
 const mockDB = {
@@ -115,13 +117,19 @@ export async function getDisplayName(id) {
 
 /** Returns a list of other users' ids and displayNames.
  *
- * @param {any} selfId primary key of the logged-in user
+ * @param {Number} selfId primary key of the logged-in user
+ * @param {String} search string to match with user name
  * @returns {JSON array} array of objects comprising the id
  *   and displayName of users other than the logged-in user
  */
-export async function getPeople(selfId) {
+export async function getPeople(selfId, search) {
   const people = await getPeopleData();
-  return people.filter((person) => person.id != selfId);
+  let otherPeople = people.filter((person) => person.id != selfId);
+  if (!otherPeople) otherPeople = [];
+  if (search) {
+    otherPeople = matchSorter(otherPeople, search, { keys: ["displayName"] });
+  }
+  return otherPeople;
 }
 
 export async function getWishlist(personId) {
