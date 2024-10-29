@@ -25,9 +25,14 @@ export default function Item({ item, personId, myId }) {
             name="mark-gift"
             id="marked-checkbox"
             value={marked}
+            aria-label={
+              marked
+                ? "Uncommit from giving this gift"
+                : "Call dibs on giving this gift"
+            }
             checked={marked === true}
             disabled={checkedBy === 0 || checkedBy === myId ? "" : "disabled"}
-            onChange={(event) => {
+            onChange={() => {
               setMarked(marked ? false : true);
               markItem(marked ? false : true, personId, item.id, myId);
               changeCheckedBy(marked ? false : true);
