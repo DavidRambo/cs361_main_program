@@ -1,4 +1,4 @@
-import { Form, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 
 import Item from "../components/item";
 import { getDisplayName, getMyId, getWishlist } from "../fetchers";
@@ -10,9 +10,6 @@ export async function loader({ params }) {
   const userId = await getMyId();
   return { name, personId, items, userId };
 }
-
-// For marking and unmarking radio inputs next to each item, try useFetcher:
-// https://reactrouter.com/en/main/hooks/use-fetcher
 
 export default function Wishlist() {
   const { name, personId, items, userId } = useLoaderData();

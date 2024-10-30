@@ -8,6 +8,9 @@ export default function Item({ item, personId, myId }) {
   const [marked, setMarked] = React.useState(item.marked);
   const [checkedBy, setCheckedBy] = React.useState(item.markedBy);
 
+  // For marking and unmarking radio inputs next to each item, try useFetcher:
+  // https://reactrouter.com/en/main/hooks/use-fetcher
+
   const changeCheckedBy = (isMarked) => {
     if (isMarked) {
       setCheckedBy(myId);
