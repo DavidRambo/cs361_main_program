@@ -21,9 +21,9 @@ export default function Wishlist() {
     <div className="wishlist">
       <h1>{name}'s Wish List</h1>
       <p>
-        To commit to giving a gift, mark the checkbox on the left. The recipient
-        won't know that they're receiving it. No one else will be able to select
-        it.
+        To commit to giving a gift, mark the checkbox on the left. You can
+        always come back and unmark it. The recipient won't know that they're
+        receiving it. No one else will be able to select it.
       </p>
       <ul>
         {items.map((item) => (
