@@ -57,5 +57,7 @@ Quality attributes and non-functional requirements:
 *** TODO User story 4: View all the gifts I have committed to get
 As a logged-in user, I can view a list of all the gifts I have marked on others' wish lists so that I can be sure to get them.
 *** TODO User story 12: Upload CSV of wish list
-*** TODO User story 13: Confirm items parsed by CSV importer
-*** TODO User story 14: Download CSV of wish list
+*** TODO User story 13: Download CSV of wish list
+*** TODO User story 14: Download checklist of wish list
+This is intended for downloading a list of gifts a user has committed to get for others.
+*** TODO User story 15: Confirm items parsed by CSV importer
