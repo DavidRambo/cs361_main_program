@@ -23,17 +23,17 @@ export async function loader({ request }) {
 
   // Get search data.
   const url = new URL(request.url);
-  const search = url.searchParams.get("search");
+  const search_query = url.searchParams.get("search");
 
   const myId = await getMyId();
   const myself = await getDisplayName(myId);
-  const people = await getPeople(myId, search);
+  const people = await getPeople(myId, search_query);
 
-  return { myself, people, search };
+  return { myself, people, search_query };
 }
 
 export default function Root() {
-  const { myself, people, search } = useLoaderData();
+  const { myself, people, search_query } = useLoaderData();
 
   // returns current navigation state: "idle" | "submitting" | "loading"
   const navigation = useNavigation();
@@ -48,8 +48,8 @@ export default function Root() {
 
   // Synchronize search field's value with url parameter.
   React.useEffect(() => {
-    document.getElementById("search").value = search;
-  }, [search]);
+    document.getElementById("search").value = search_query;
+  }, [search_query]);
 
   return (
     <>
@@ -69,19 +69,21 @@ export default function Root() {
           <Form id="search-form" role="search">
             <input
               id="search"
+              className={searching ? "loading" : ""}
               aria-label="Search wish lists"
               placeholder="Search"
               autoComplete="off"
               type="search"
               name="search"
-              defaultValue={search}
+              defaultValue={search_query}
               onChange={(event) => {
+                const isFirstSearch = search_query == null;
                 submit(event.currentTarget.form, {
                   replace: !isFirstSearch, // Only replace search results in nav history.
                 });
               }}
             />
-            <div id="search-spinner" aria-hidden hidden={true} />
+            <div id="search-spinner" aria-hidden hidden={!searching} />
             <div className="sr-only" aria-live="polite"></div>
           </Form>
         </div>
