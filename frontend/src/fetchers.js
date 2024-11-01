@@ -36,11 +36,19 @@ const mockDB = {
       items: [
         {
           id: 1,
-          what: "Aphrodite's Advent Calendar",
+          what: "Lotions and Potions Advent Calendar",
           link: "",
           details: "",
           marked: true,
           markedBy: 2,
+        },
+        {
+          id: 2,
+          what: "Rununculus Quorms",
+          link: "",
+          details: "",
+          marked: false,
+          markedBy: 0,
         },
       ],
     },
