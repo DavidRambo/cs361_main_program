@@ -1,5 +1,8 @@
 * Main Program for CS 361
-** Sprint Backlog [3/6]
+** Sprint Backlog [7/10]
+*** TODO User story: Upload image for new trip
+*** TODO User story: View trip thumbnails
+*** TODO User story: Select image to be a trip's thumbnail
 *** DONE User story 5: View gift information
 As a logged-in user viewing someone's wish list, I can select a gift for more information.
 
@@ -41,7 +44,7 @@ As a logged-in user viewing someone's wish list, I can mark a gift as having bee
 As a logged-in user viewing someone's wish list with a gift I have marked as taken, I can unmark that gift so that it may be selected by someone else.
 *** DONE User story 8: Unable to unmark gift another user has selected
 As a logged-in user viewing someone's wish list with a gift I have not marked as taken, I cannot unmark that gift so that other users' decisions are maintained.
-** Product Backlog
+** Product Backlog [0/8]
 *** TODO User story 1: Register
 As a new user, I can use a special code to register so that I can join a gift-giving group.
 *** TODO User story 2: Login
