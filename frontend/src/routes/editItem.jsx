@@ -23,7 +23,7 @@ export default function EditItem() {
   const navigate = useNavigate();
 
   return (
-    <div id="edit-item-component">
+    <div className="item-entry">
       <Form method="post" id="item-form">
         <h2>Edit Your Gift Idea</h2>
 
