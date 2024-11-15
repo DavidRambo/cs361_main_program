@@ -1,8 +1,8 @@
 * Main Program for CS 361
-** Sprint Backlog [7/10]
-*** TODO User story: Upload image for new trip
-*** TODO User story: View trip thumbnails
-*** TODO User story: Select image to be a trip's thumbnail
+** Sprint Backlog [10/10]
+*** DONE User story: Upload image for new trip
+*** DONE User story: View trip thumbnails
+*** DONE User story: Select image to be a trip's thumbnail
 *** DONE User story 5: View gift information
 As a logged-in user viewing someone's wish list, I can select a gift for more information.
 
@@ -44,14 +44,14 @@ As a logged-in user viewing someone's wish list, I can mark a gift as having bee
 As a logged-in user viewing someone's wish list with a gift I have marked as taken, I can unmark that gift so that it may be selected by someone else.
 *** DONE User story 8: Unable to unmark gift another user has selected
 As a logged-in user viewing someone's wish list with a gift I have not marked as taken, I cannot unmark that gift so that other users' decisions are maintained.
-** Product Backlog [0/8]
+** Product Backlog [0/12]
 *** TODO User story 1: Register
 As a new user, I can use a special code to register so that I can join a gift-giving group.
 *** TODO User story 2: Login
 As a new user, I can log in with my username and password so that I can use the app.
 
 Functional requirements:
-- Given a user is registered and at the login page, when they enter their username and password, then they will be sent to the landing page.
+- Given a registered user is at the login page, when they enter their username and password, then they will be sent to the landing page.
 
 Quality attributes and non-functional requirements:
 - Securability: The user can only interact with their group’s wish lists and edit their own once they have logged in.
@@ -64,3 +64,7 @@ As a logged-in user, I can view a list of all the gifts I have marked on others'
 *** TODO User story 14: Download checklist of wish list
 This is intended for downloading a list of gifts a user has committed to get for others.
 *** TODO User story 15: Confirm items parsed by CSV importer
+*** TODO User story 16: Enter multiple gift ideas into a text field
+*** TODO User story 17: Confirm parsed gift ideas
+*** TODO User story 18: Send email of gifts I have selected
+*** TODO User story 19: Reset password via email? Or: Send the recipient an email listing gifts received and who gave them.
