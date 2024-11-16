@@ -143,3 +143,21 @@ class Gift(GiftPublic, table=True):
     """
 
     id: int = Field(primary_key=True)
+
+
+class Token(SQLModel):
+    """JSON payload containing access token."""
+
+    access_token: str
+    token_type: str = "bearer"
+
+
+class TokenPayload(SQLModel):
+    """Contents of JWT token."""
+
+    sub: str | None = None
+
+
+class NewPassword(SQLModel):
+    token: str
+    new_password: str = Field(min_length=8, max_length=120)
