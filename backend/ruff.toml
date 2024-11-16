@@ -28,8 +28,8 @@ exclude = [
     "venv",
 ]
 
-# Django recommended line length
-line-length = 110
+# Black line length
+line-length = 88
 indent-width = 4
 
 # Assume Python 3.12
