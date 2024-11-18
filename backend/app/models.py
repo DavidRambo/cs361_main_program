@@ -100,16 +100,16 @@ class GiftCreate(GiftBase):
     owner: User = Relationship(back_populates="wishlist")
 
 
-class GiftUpdate(GiftBase):
-    """Properties to receive upon updating a Gift."""
-
-    pass
-
-
 class GiftForOwner(GiftBase):
     """View of a Gift provided to the owner whose gift idea it is."""
 
     id: int = Field(primary_key=True)
+
+
+class GiftUpdate(GiftForOwner):
+    """Properties to receive upon updating a Gift."""
+
+    pass
 
 
 class GiftPublic(GiftCreate):
