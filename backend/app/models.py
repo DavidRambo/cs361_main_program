@@ -2,7 +2,9 @@
 
 import uuid
 
-from pydantic import EmailStr, Url
+import sqlmodel
+
+from pydantic import AnyUrl, EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
 
@@ -28,22 +30,35 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=120)
 
 
+class UserRegister(SQLModel):
+    """Model for properties received via API when registering a new user.
+
+    Attributes:
+        password: the password to be hashed
+        registration_code: code provided by admin to join the gift exchange group
+    """
+
+    display_name: str = Field(min_length=1, max_length=255)
+    email: EmailStr = Field(unique=True, index=True)
+    password: str = Field(min_length=8, max_length=120)
+
+
 class User(UserBase, table=True):
     """User database model.
 
     Attributes:
         id: primary key
-        hashed_pasword: password hash
+        hashed_password: password hash
         wishlist: array of all Gift rows with owner_id == User.id
     """
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    hashed_pasword: str
+    hashed_password: str
     wishlist: list["Gift"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 class UserForOthers(UserBase):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: uuid.UUID
     wishlist: list["Gift"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
@@ -51,6 +66,12 @@ class UserForSelf(UserBase):
     wishlist_self: list["GiftForOwner"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
+
+
+class UserUpdateEmail(UserBase):
+    """Properties to receive when updating a user's email and/or password."""
+
+    email: EmailStr | None = Field(default=None, max_length=255)
 
 
 class UserUpdateName(UserBase):
@@ -74,7 +95,7 @@ class UserPublic(UserBase):
 
 class UsersPublic(SQLModel):
     data: list[UserPublic]
-    count: int
+    # count: int
 
 
 class GiftBase(SQLModel):
@@ -87,23 +108,20 @@ class GiftBase(SQLModel):
     """
 
     what: str = Field(min_length=1, max_length=255)
-    link: Url | None = Field(default=None)
+    link: AnyUrl | None = Field(default=None, sa_type=sqlmodel.AutoString)
     details: str | None = Field(default=None)
 
 
 class GiftCreate(GiftBase):
     """Properties to receive upon creating a Gift."""
 
-    owner_id: uuid.UUID = Field(
-        foreign_key="user.id", nullable=False, ondelete="CASCADE"
-    )
-    owner: User = Relationship(back_populates="wishlist")
+    pass
 
 
 class GiftForOwner(GiftBase):
     """View of a Gift provided to the owner whose gift idea it is."""
 
-    id: int = Field(primary_key=True)
+    id: uuid.UUID
 
 
 class GiftUpdate(GiftForOwner):
@@ -112,7 +130,7 @@ class GiftUpdate(GiftForOwner):
     pass
 
 
-class GiftPublic(GiftCreate):
+class GiftPublic(GiftBase):
     """View of a Gift for users other than the gift idea's owner.
 
     Attributes:
@@ -120,8 +138,9 @@ class GiftPublic(GiftCreate):
         marked_by: id of the User who has marked the Gift
     """
 
+    id: uuid.UUID
     marked: bool = Field(default=False)
-    marked_by: int | None = Field(default=None, foreign_key="user.id")
+    marked_by: uuid.UUID | None = Field(default=None)
 
 
 class Gift(GiftPublic, table=True):
@@ -142,7 +161,25 @@ class Gift(GiftPublic, table=True):
         owner: User row in database whose gift it is
     """
 
-    id: int = Field(primary_key=True)
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    owner_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User = Relationship(back_populates="wishlist")
+
+
+class GiftsPublic(SQLModel):
+    data: list[GiftPublic]
+    count: int
+
+
+class GiftsForOwner(SQLModel):
+    data: list[GiftForOwner]
+    count: int
+
+
+class Message(SQLModel):
+    message: str
 
 
 class Token(SQLModel):
