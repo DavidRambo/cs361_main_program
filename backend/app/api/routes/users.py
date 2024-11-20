@@ -47,34 +47,6 @@ def update_user_name(
     return db_user
 
 
-# @router.patch("/me/email", response_model=UserPublic | Message)
-# def update_user(
-#     *, session: SessionDep, user_in: UserUpdateEmail, current_user: CurrentUser
-# ):
-#     """Update's the user's email."""
-#     if user_in.email:
-#         existing_user = crud.get_user_by_email(session=session, email=user_in.email)
-#         if existing_user and existing_user.id != current_user.id:
-#             raise fastapi.HTTPException(
-#                 status_code=fastapi.status.HTTP_409_CONFLICT,
-#                 detail="User with this email already exists.",
-#             )
-#     else:
-#         raise fastapi.HTTPException(
-#             status_code=fastapi.status.HTTP_400_BAD_REQUEST,
-#             detail="Missing new email address.",
-#         )
-
-#     db_user = session.get(User, current_user.id)
-#     if not db_user:
-#         raise fastapi.HTTPException(
-#             status_code=404, detail="That user does not exist in the database."
-#         )
-
-#     db_user = crud.update_user(session=session, db_user=db_user, user_in=user_in)
-#     return db_user
-
-
 @router.patch("/me/password", response_model=Message)
 def update_password(
     *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
