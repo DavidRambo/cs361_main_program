@@ -23,6 +23,9 @@ from app.models import (
 )
 
 
+# All path operations' paths added to this router are prefixed with "/users".
+# For example, @router.get("/") will handle "/users/", and @router.patch("/me/name")
+# will handle "/users/me/name".
 router = fastapi.APIRouter(prefix="/users", tags=["users"])
 
 
