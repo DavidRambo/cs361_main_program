@@ -34,9 +34,9 @@ export default function Register() {
   localStorage.clear();
 
   return (
-    <div className="form-container">
+    <div className="auth-page">
       <h1>Register</h1>
-      <Form method="post">
+      <Form method="post" className="auth-form">
         <label htmlFor="displayName" className="form-input-label">
           Display Name:
         </label>
@@ -62,7 +62,7 @@ export default function Register() {
         </label>
         <input name="regCode" type="text" className="form-input" required />
 
-        <div id="form-buttons">
+        <div>
           <button type="submit">Submit</button>
         </div>
       </Form>
