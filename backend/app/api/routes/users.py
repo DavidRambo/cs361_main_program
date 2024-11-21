@@ -10,11 +10,11 @@ from app.core.security import get_password_hash, verify_password
 from app.models import (
     Gift,
     Message,
-    UpdatePassword,
+    # UpdatePassword,
     User,
     UserCreate,
     UserRegister,
-    UserUpdateEmail,
+    # UserUpdateEmail,
     UserUpdateName,
     UserPublic,
     UsersPublic,
@@ -48,25 +48,25 @@ def update_user_name(
     return db_user
 
 
-@router.patch("/me/password", response_model=Message)
-def update_password(
-    *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
-):
-    """Updates the logged-in user's password."""
-    if not verify_password(body.current_password, current_user.hashed_password):
-        raise fastapi.HTTPException(status_code=400, detail="Incorrect password")
+# @router.patch("/me/password", response_model=Message)
+# def update_password(
+#     *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
+# ):
+#     """Updates the logged-in user's password."""
+#     if not verify_password(body.current_password, current_user.hashed_password):
+#         raise fastapi.HTTPException(status_code=400, detail="Incorrect password")
 
-    if body.current_password == body.new_password:
-        raise fastapi.HTTPException(
-            status_code=400,
-            detail="New password cannot be the same as the current password.",
-        )
+#     if body.current_password == body.new_password:
+#         raise fastapi.HTTPException(
+#             status_code=400,
+#             detail="New password cannot be the same as the current password.",
+#         )
 
-    hashed_password = get_password_hash(body.new_password)
-    current_user.hashed_password = hashed_password
-    session.add(current_user)
-    session.commit()
-    return Message(message="Password updated.")
+#     hashed_password = get_password_hash(body.new_password)
+#     current_user.hashed_password = hashed_password
+#     session.add(current_user)
+#     session.commit()
+#     return Message(message="Password updated.")
 
 
 @router.get("/me", response_model=UserPublic)

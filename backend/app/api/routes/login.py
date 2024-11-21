@@ -48,26 +48,26 @@ def test_token(current_user: CurrentUser):
     return current_user
 
 
-@router.post("/password-recovery/{email}")
-def recover_password(email: str, session: SessionDep) -> Message:
-    """Sends a password recovery email."""
-    user = crud.get_user_by_email(session=session, email=email)
+# @router.post("/password-recovery/{email}")
+# def recover_password(email: str, session: SessionDep) -> Message:
+#     """Sends a password recovery email."""
+#     user = crud.get_user_by_email(session=session, email=email)
 
-    if not user:
-        raise fastapi.HTTPException(
-            status_code=404, detail="A user with that email does not exist."
-        )
+#     if not user:
+#         raise fastapi.HTTPException(
+#             status_code=404, detail="A user with that email does not exist."
+#         )
 
-    # TODO: write app.utils.generate_password_reset_token
+#     # TODO: write app.utils.generate_password_reset_token
 
-    # TODO: Integrate with email microservice.
+#     # TODO: Integrate with email microservice.
 
 
-@router.post("/reset-password")
-def reset_password(session: SessionDep, body: NewPassword) -> Message:
-    """Resets password."""
-    # TODO: write app.utils.verify_password_reset_token
-    pass
+# @router.post("/reset-password")
+# def reset_password(session: SessionDep, body: NewPassword) -> Message:
+#     """Resets password."""
+#     # TODO: write app.utils.verify_password_reset_token
+#     pass
 
 
 # NOTE: FastAPI's template provides another path operation that provides
