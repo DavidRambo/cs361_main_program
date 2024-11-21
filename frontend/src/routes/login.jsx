@@ -20,10 +20,10 @@ export async function action({ request }) {
 
 export default function Login() {
   return (
-    <div className="form-container">
+    <div className="auth-page">
       <h1>Login</h1>
 
-      <Form method="post">
+      <Form method="post" className="auth-form">
         <label htmlFor="email" className="form-input-label">
           Email:
         </label>
@@ -41,14 +41,17 @@ export default function Login() {
           required
         />
 
-        <div id="form-buttons">
+        <div>
           <button type="submit">Submit</button>
         </div>
       </Form>
 
-      <Link className="buttonLink" to={`/register`}>
-        Register
-      </Link>
+      <div id="regButton">
+        <p>Or click here to register:</p>
+        <Link className="buttonLink" to={`/register`}>
+          Register
+        </Link>
+      </div>
     </div>
   );
 }
