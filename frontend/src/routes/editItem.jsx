@@ -24,7 +24,7 @@ export default function EditItem() {
 
   return (
     <div className="item-entry">
-      <Form method="post" id="item-form">
+      <Form method="post">
         <h2>Edit Your Gift Idea</h2>
 
         <p>What is it?</p>
