@@ -334,7 +334,7 @@ h2 {
   background: #e3e3e3;
 }
 
-#change-name-form {
+.form-container {
   max-width: 30rem;
   height: 16rem;
 
@@ -343,8 +343,14 @@ h2 {
   justify-content: flex-start;
   align-items: center;
 }
-#change-name-form * {
+.form-container * {
   margin-bottom: 1rem;
+}
+
+.form-input-label {
+  margin-right: auto;
+  margin-left: 10px;
+  padding-left: 10px;
 }
 
 input,

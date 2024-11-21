@@ -1,0 +1,54 @@
+import { Form, Link, redirect } from "react-router-dom";
+
+import api from "../api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+
+export async function action({ request }) {
+  const formData = await request.formData();
+
+  const oauthData = new URLSearchParams();
+  oauthData.append("username", formData.get("email"));
+  oauthData.append("password", formData.get("password"));
+
+  const res = await api.post("/login/access-token", oauthData);
+
+  localStorage.setItem(ACCESS_TOKEN, res.data.access_token);
+  localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+
+  return redirect("/");
+}
+
+export default function Login() {
+  return (
+    <div className="form-container">
+      <h1>Login</h1>
+
+      <Form method="post">
+        <label htmlFor="email" className="form-input-label">
+          Email:
+        </label>
+
+        <input name="email" type="email" className="form-input" required />
+
+        <label htmlFor="password" className="form-input-label">
+          Password:
+        </label>
+
+        <input
+          name="password"
+          type="password"
+          className="form-input"
+          required
+        />
+
+        <div id="form-buttons">
+          <button type="submit">Submit</button>
+        </div>
+      </Form>
+
+      <Link className="buttonLink" to={`/register`}>
+        Register
+      </Link>
+    </div>
+  );
+}

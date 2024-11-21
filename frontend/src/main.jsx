@@ -3,6 +3,9 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
+import ProtectedRoute from "./components/protectedRoute";
+import Login, { action as loginAction } from "./routes/login";
+import Register, { action as registerAction } from "./routes/register";
 import Root, { loader as rootLoader } from "./routes/root";
 import ErrorPage from "./error-page";
 import MyWishlist, { loader as myWishlistLoader } from "./routes/myWishlist";
@@ -19,10 +22,31 @@ import EditItem, {
 } from "./routes/editItem";
 import { action as deleteAction } from "./routes/delete";
 
+function Logout() {
+  localStorage.clear();
+  return <Navigate to="/login" />;
+}
+
 const router = createBrowserRouter([
   {
+    path: "/register",
+    element: <Register />,
+    errorElement: <ErrorPage />,
+    action: registerAction,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <ErrorPage />,
+    action: loginAction,
+  },
+  {
     path: "/",
-    element: <Root />,
+    element: (
+      <ProtectedRoute>
+        <Root />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     loader: rootLoader,
     children: [
@@ -32,6 +56,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Index />,
+          },
+          {
+            path: "/logout",
+            element: <Logout />,
           },
           {
             path: "/mywishlist",
