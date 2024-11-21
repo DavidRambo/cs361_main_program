@@ -53,7 +53,7 @@ def create_gift(*, session: SessionDep, current_user: CurrentUser, gift_in: Gift
     return gift
 
 
-@router.put("/me/{gift_id}", response_model=GiftForOwner)
+@router.patch("/me/{gift_id}", response_model=GiftForOwner)
 def update_gift(
     *,
     session: SessionDep,

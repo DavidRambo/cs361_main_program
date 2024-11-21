@@ -1,4 +1,3 @@
-import uuid
 from typing import Any
 
 import pydantic
@@ -78,7 +77,7 @@ def authenticate(
 
 
 def create_gift(
-    *, session: sqlmodel.Session, gift_in: GiftCreate, owner_id: uuid.UUID
+    *, session: sqlmodel.Session, gift_in: GiftCreate, owner_id: id
 ) -> Gift:
     db_gift = Gift.model_validate(gift_in, update={"owner_id": owner_id})
     session.add(db_gift)

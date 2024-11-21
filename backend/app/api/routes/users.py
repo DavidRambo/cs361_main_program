@@ -1,7 +1,5 @@
 """API Routes pertaining to Users."""
 
-import uuid
-
 import fastapi
 import sqlmodel
 
@@ -95,7 +93,7 @@ def register_user(session: SessionDep, user_in: UserRegister, reg_code: str):
 
 
 @router.get("/{user_id}", response_model=UserPublic)
-def read_user_by_id(user_id: uuid.UUID, session: SessionDep, current_user: CurrentUser):
+def read_user_by_id(user_id: int, session: SessionDep, current_user: CurrentUser):
     """Get a user by their id."""
     user = session.get(User, user_id)
     return user
@@ -103,7 +101,7 @@ def read_user_by_id(user_id: uuid.UUID, session: SessionDep, current_user: Curre
 
 @router.delete("/{user_id}")
 def delete_user(
-    session: SessionDep, current_user: CurrentUser, user_id: uuid.UUID
+    session: SessionDep, current_user: CurrentUser, user_id: int
 ) -> Message:
     """Delete a user."""
     user = session.get(User, user_id)

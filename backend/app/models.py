@@ -1,6 +1,5 @@
 """Models for the SQL Database"""
 
-import uuid
 
 import sqlmodel
 
@@ -52,14 +51,16 @@ class User(UserBase, table=True):
         wishlist: array of all Gift rows with owner_id == User.id
     """
 
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
     wishlist: list["Gift"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 class UserForOthers(UserBase):
-    id: uuid.UUID
-    wishlist: list["Gift"] = Relationship(back_populates="owner", cascade_delete=True)
+    id: int
+    wishlist: list["Gift"] | None = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
 
 
 class UserForSelf(UserBase):
