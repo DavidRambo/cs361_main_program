@@ -38,7 +38,7 @@ export default function ChangeName() {
   const navigate = useNavigate();
 
   return (
-    <div id="change-name-form">
+    <div className="form-container">
       <Form method="post">
         <p>Enter your new display name:</p>
 
