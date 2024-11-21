@@ -32,19 +32,6 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=120)
 
 
-class UserRegister(SQLModel):
-    """Model for properties received via API when registering a new user.
-
-    Attributes:
-        password: the password to be hashed
-        registration_code: code provided by admin to join the gift exchange group
-    """
-
-    display_name: str = Field(min_length=1, max_length=255)
-    email: EmailStr = Field(unique=True, index=True)
-    password: str = Field(min_length=8, max_length=120)
-
-
 class User(UserBase, table=True):
     """User database model.
 
@@ -56,7 +43,9 @@ class User(UserBase, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
-    wishlist: list["Gift"] = Relationship(back_populates="owner", cascade_delete=True)
+    wishlist: list["Gift"] | None = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
 
 
 class UserForOthers(UserBase):
@@ -67,7 +56,8 @@ class UserForOthers(UserBase):
 
 
 class UserForSelf(UserBase):
-    wishlist_self: list["GiftForOwner"] = Relationship(
+    id: int
+    wishlist_self: list["GiftForOwner"] | None = Relationship(
         back_populates="owner", cascade_delete=True
     )
 
@@ -78,7 +68,7 @@ class UserUpdateEmail(UserBase):
     email: EmailStr | None = Field(default=None, max_length=255)
 
 
-class UserUpdateName(UserBase):
+class UserUpdateName(SQLModel):
     """Properties to receive when updating User's display name."""
 
     display_name: str = Field(min_length=1, max_length=255)
@@ -128,10 +118,10 @@ class GiftForOwner(GiftBase):
     id: int
 
 
-class GiftUpdate(GiftForOwner):
+class GiftUpdate(GiftBase):
     """Properties to receive upon updating a Gift."""
 
-    pass
+    what: str | None = Field(default=None, min_length=1, max_length=255)
 
 
 class GiftPublic(GiftBase):
@@ -172,12 +162,12 @@ class Gift(GiftPublic, table=True):
 
 class GiftsPublic(SQLModel):
     data: list[GiftPublic]
-    count: int
+    # count: int
 
 
 class GiftsForOwner(SQLModel):
     data: list[GiftForOwner]
-    count: int
+    # count: int
 
 
 class Message(SQLModel):
