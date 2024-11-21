@@ -75,14 +75,14 @@ def read_user_current(current_user: CurrentUser):
 
 
 @router.post("/register", response_model=UserPublic)
-def register_user(session: SessionDep, user_in: UserCreate, reg_code: str):
+def register_user(session: SessionDep, user_in: UserCreate):
     """Creates a new user."""
     user = crud.get_user_by_email(session=session, email=user_in.email)
     if user:
         raise fastapi.HTTPException(
             status_code=400, detail="A user with this email already exists."
         )
-    if reg_code != settings.REGISTRATION_CODE:
+    if user_in.reg_code != settings.REGISTRATION_CODE:
         raise fastapi.HTTPException(
             status_code=400, detail="Incorrect registration code."
         )

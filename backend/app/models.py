@@ -30,6 +30,7 @@ class UserCreate(UserBase):
     """
 
     password: str = Field(min_length=8, max_length=120)
+    reg_code: str = Field(min_length=4, max_length=20)
 
 
 class User(UserBase, table=True):
