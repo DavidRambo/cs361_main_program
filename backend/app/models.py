@@ -1,10 +1,13 @@
 """Models for the SQL Database"""
 
+from typing import Annotated
 
 import sqlmodel
 
-from pydantic import AnyUrl, EmailStr
+from pydantic import AfterValidator, AnyUrl, EmailStr
 from sqlmodel import SQLModel, Field, Relationship
+
+UrlStr = Annotated[AnyUrl, AfterValidator(str)]
 
 
 class UserBase(SQLModel):
@@ -109,7 +112,7 @@ class GiftBase(SQLModel):
     """
 
     what: str = Field(min_length=1, max_length=255)
-    link: AnyUrl | None = Field(default=None, sa_type=sqlmodel.AutoString)
+    link: UrlStr | None = Field(default=None, sa_type=sqlmodel.AutoString)
     details: str | None = Field(default=None)
 
 
