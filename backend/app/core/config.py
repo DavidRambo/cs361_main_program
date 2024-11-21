@@ -26,6 +26,7 @@ class Settings(pydantic_settings.BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe(32)
     REGISTRATION_CODE: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 Days
+    FRONTEND_HOST: str = "http://localhost:5173"
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
 
     PROJECT_NAME: str
@@ -34,11 +35,13 @@ class Settings(pydantic_settings.BaseSettings):
         list[pydantic.AnyUrl] | str, pydantic.BeforeValidator(parse_cors)
     ] = []
 
-    @pydantic.computed_field
+    @pydantic.computed_field  # type: ignore[prop-decorator]
     @property
     def all_cors_origins(self) -> list[str]:
         """Returns a list of all CORS."""
-        return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGIN]
+        return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGIN] + [
+            self.FRONTEND_HOST
+        ]
 
     FIRST_USER: str
     FIRST_USER_PASSWORD: str
