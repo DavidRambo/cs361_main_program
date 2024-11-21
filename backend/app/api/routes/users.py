@@ -13,7 +13,6 @@ from app.models import (
     # UpdatePassword,
     User,
     UserCreate,
-    UserRegister,
     # UserUpdateEmail,
     UserUpdateName,
     UserPublic,
@@ -76,7 +75,7 @@ def read_user_current(current_user: CurrentUser):
 
 
 @router.post("/register", response_model=UserPublic)
-def register_user(session: SessionDep, user_in: UserRegister, reg_code: str):
+def register_user(session: SessionDep, user_in: UserCreate, reg_code: str):
     """Creates a new user."""
     user = crud.get_user_by_email(session=session, email=user_in.email)
     if user:
