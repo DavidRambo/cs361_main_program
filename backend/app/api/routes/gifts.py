@@ -36,7 +36,7 @@ def get_wishlist(session: SessionDep, current_user: CurrentUser, user_id: int):
             detail="You cannot view your own wish list in this way.",
         )
 
-    statement = sqlmodel.select(Gift).where(Gift.owner_id == current_user.id)
+    statement = sqlmodel.select(Gift).where(Gift.owner_id == user_id)
     gifts = session.exec(statement).all()
     return GiftsPublic(data=gifts)
 
