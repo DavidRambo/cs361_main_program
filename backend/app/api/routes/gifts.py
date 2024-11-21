@@ -1,7 +1,5 @@
 """API Routes pertaining to Gifts."""
 
-import uuid
-
 import fastapi
 import sqlmodel
 
@@ -30,9 +28,9 @@ def get_own_wishlist(session: SessionDep, current_user: CurrentUser):
 
 
 @router.get("/{user_id}/wishlist", response_model=GiftsPublic)
-def get_wishlist(session: SessionDep, current_user: CurrentUser, id: uuid.UUID):
+def get_wishlist(session: SessionDep, current_user: CurrentUser, user_id: int):
     """Gets a user's wishlist for the logged-in user to view."""
-    if current_user.id == id:
+    if current_user.id == user_id:
         raise fastapi.HTTPException(
             status_code=fastapi.status.HTTP_403_FORBIDDEN,
             detail="You cannot view your own wish list in this way.",
@@ -57,7 +55,7 @@ def create_gift(*, session: SessionDep, current_user: CurrentUser, gift_in: Gift
 def update_gift(
     *,
     session: SessionDep,
-    gift_id: uuid.UUID,
+    gift_id: int,
     current_user: CurrentUser,
     gift_in: GiftUpdate,
 ):
@@ -81,7 +79,7 @@ def update_gift(
 
 
 @router.patch("/{gift_id}", response_model=GiftPublic)
-def mark_gift(session: SessionDep, current_user: CurrentUser, gift_id: uuid.UUID):
+def mark_gift(session: SessionDep, current_user: CurrentUser, gift_id: int):
     """Marks or unmarks the gift by the logged-in user."""
     gift: Gift = session.get(Gift, gift_id)
 
@@ -111,7 +109,7 @@ def mark_gift(session: SessionDep, current_user: CurrentUser, gift_id: uuid.UUID
 
 
 @router.delete("/{gift_id}")
-def delete_gift(session: SessionDep, current_user: CurrentUser, gift_id: uuid.UUID):
+def delete_gift(session: SessionDep, current_user: CurrentUser, gift_id: int):
     """Deletes a gift from the logged-in user's wish list."""
     gift: Gift = session.get(Gift, gift_id)
     if not gift:
