@@ -94,7 +94,7 @@ class UpdatePassword(SQLModel):
 class UserPublic(UserBase):
     """Properties to return via API: id, email, and display_name."""
 
-    id: uuid.UUID
+    id: int
 
 
 class UsersPublic(SQLModel):
@@ -125,7 +125,7 @@ class GiftCreate(GiftBase):
 class GiftForOwner(GiftBase):
     """View of a Gift provided to the owner whose gift idea it is."""
 
-    id: uuid.UUID
+    id: int
 
 
 class GiftUpdate(GiftForOwner):
@@ -142,9 +142,9 @@ class GiftPublic(GiftBase):
         marked_by: id of the User who has marked the Gift
     """
 
-    id: uuid.UUID
+    id: int
     marked: bool = Field(default=False)
-    marked_by: uuid.UUID | None = Field(default=None)
+    marked_by: int | None = Field(default=None)
 
 
 class Gift(GiftPublic, table=True):
@@ -165,10 +165,8 @@ class Gift(GiftPublic, table=True):
         owner: User row in database whose gift it is
     """
 
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    owner_id: uuid.UUID = Field(
-        foreign_key="user.id", nullable=False, ondelete="CASCADE"
-    )
+    id: int | None = Field(default=None, primary_key=True)
+    owner_id: int = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
     owner: User = Relationship(back_populates="wishlist")
 
 
