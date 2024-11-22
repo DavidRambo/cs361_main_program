@@ -198,6 +198,15 @@ export async function editItem(userId, itemId, updates) {
   writeWishlistsData(allWishlists);
 }
 
+export async function deleteGift(giftId) {
+  try {
+    const res = await api.delete(`/gifts/${giftId}`);
+    return res; // "Gift deleted."
+  } catch (err) {
+    console.log("Failed to delete item. Error: ", err);
+  }
+}
+
 export async function deleteItem(itemId) {
   const userId = await getMyId();
 

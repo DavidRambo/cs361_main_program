@@ -1,8 +1,8 @@
 import { redirect } from "react-router-dom";
 
-import { deleteItem } from "../fetchers";
+import { deleteGift } from "../fetchers";
 
 export async function action({ params }) {
-  await deleteItem(parseInt(params.itemId));
+  await deleteGift(params.itemId);
   return redirect("/mywishlist");
 }
