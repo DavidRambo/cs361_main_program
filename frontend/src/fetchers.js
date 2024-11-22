@@ -1,103 +1,108 @@
 import { matchSorter } from "match-sorter";
 
-// model data in JSON for prepopulating localStorage.
-// Two main sections: people and wishlists. These are paired by id.
-const mockDB = {
-  people: [
-    { id: 1, displayName: "David" },
-    { id: 2, displayName: "Bri" },
-    { id: 3, displayName: "Ranger" },
-    { id: 4, displayName: "Sookie" },
-  ],
-  wishlists: [
-    {
-      id: 1,
-      items: [
-        {
-          id: 1,
-          what: "ZSA Voyager ",
-          link: "zsa.io",
-          details: "white, blank, pro red switches",
-          marked: false,
-          markedBy: 0,
-        },
-        {
-          id: 2,
-          what: "Extra long headphone cable",
-          link: "",
-          details: "",
-          marked: false,
-          markedBy: 0,
-        },
-      ],
-    },
-    {
-      id: 2,
-      items: [
-        {
-          id: 1,
-          what: "Lotions and Potions Advent Calendar",
-          link: "",
-          details: "",
-          marked: true,
-          markedBy: 2,
-        },
-        {
-          id: 2,
-          what: "Rununculus Quorms",
-          link: "",
-          details: "",
-          marked: false,
-          markedBy: 0,
-        },
-      ],
-    },
-    {
-      id: 3,
-      items: [
-        {
-          id: 3,
-          what: "King Lou's Duck Necks",
-          link: "",
-          details: "Multiple boxes!",
-          marked: true,
-          markedBy: 1,
-        },
-      ],
-    },
-    {
-      id: 4,
-      items: [
-        {
-          id: 1,
-          what: "King Lou's chicken feet",
-          link: "https://kingloupets.com/collections/shop-treats/products/free-range-whole-chicken-feet",
-          details: "Or similar.",
-          marked: false,
-          markedBy: 0,
-        },
-      ],
-    },
-  ],
-};
+import api from "./api";
 
-// Prepopulate localStorage with people and wishlists data if they do not exist.
-export function buildLocalData() {
-  if (!localStorage.getItem("PeopleData")) {
-    console.log(">>> Loading mock user data...");
-    localStorage.setItem("PeopleData", JSON.stringify(mockDB.people));
-  }
-  if (!localStorage.getItem("WishlistsData")) {
-    console.log(">>> Loading mock wishlist data...");
-    localStorage.setItem("WishlistsData", JSON.stringify(mockDB.wishlists));
+/** GET baseURL/users/{user_id} -> JSON of UserPublic
+ *
+ * Returns:
+ *  {
+ *    "display_name": str,
+ *    "email": str,
+ *    "id": int
+ *  }
+ */
+export async function getUser(userId) {
+  try {
+    const res = await api.get(`/users/${userId}`);
+    return res;
+  } catch (err) {
+    console.log("Error: ", err);
   }
 }
 
-function getPeopleData() {
+/** GET baseURL/users -> JSON array of UsersPublic
+ *
+ * Excludes the current user.
+ *
+ * Returns:
+ *  [
+ *  {
+ *    "display_name": str,
+ *    "email": str,
+ *    "id": int
+ *  },
+ *  ]
+ */
+export async function getUsers() {
   try {
-    return JSON.parse(localStorage.getItem("PeopleData"));
+    const res = await api.get("/users");
+    return res.data.data;
   } catch (err) {
-    console.log("Failed to parse JSON: ", err);
+    console.log("Error: ", err);
+  }
+}
+
+/** GET baseUrl/users/me -> JSON of UserPublic
+ *
+ * Returns the schema of the current user:
+ * {
+ *    "display_name": str,
+ *    "email": str,
+ *    "id": int
+ *  }
+ */
+export async function getMe() {
+  try {
+    const res = await api.get("/users/me");
+    return res.data;
+  } catch (err) {
+    console.log("Error: ", err);
+  }
+}
+
+/**
+ * @param {string} newName submitted name to display
+ * @returns {boolean} true if no other user is using that name
+ */
+export async function nameIsUnique(newName) {
+  // TODO: cache getUsers() data when it runs in Root, since it's used in nav sidebar?
+  const users = await getUsers();
+  for (const person of users) {
+    if (newName === person.display_name) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @param {string} newName new display name for the current user
+ */
+export async function changeDisplayName(newName) {
+  await api.patch("/users/me/name", {
+    display_name: newName,
+  });
+}
+
+/** GET baseUrl/gifts/me/wishlist -> JSON of list[GiftsForOwner]
+ *
+ * Returns the current user's wish list, which is a JSON array.
+ * */
+export async function getMyWishlist() {
+  try {
+    const res = await api.get("/gifts/me/wishlist");
+    return res.data.data;
+  } catch (err) {
+    console.log("Error: ", err);
+  }
+}
+
+export async function getGift(id) {
+  try {
+    const res = await api.get(`/gifts/${id}`);
+    return res.data;
+  } catch (err) {
+    console.log("Error retrieving gift: ", err);
   }
 }
 
@@ -109,18 +114,8 @@ async function getWishlistsData() {
   }
 }
 
-async function writePeopleData(data) {
-  localStorage.setItem("PeopleData", JSON.stringify(data));
-}
-
 async function writeWishlistsData(data) {
   localStorage.setItem("WishlistsData", JSON.stringify(data));
-}
-
-export async function getDisplayName(id) {
-  const people = await getPeopleData();
-  const match = people.filter((person) => person.id === id)[0];
-  return match.displayName;
 }
 
 /** Returns a list of other users' ids and displayNames.
@@ -140,37 +135,53 @@ export async function getPeople(selfId, search) {
   return otherPeople;
 }
 
-export async function getWishlist(personId) {
-  const wishlists = await getWishlistsData();
-  const match = wishlists.filter((wishlist) => wishlist.id === personId)[0];
-  return match.items;
+/** GET baseUrl/gifts/{user_id}/wishlist -> JSON array of GiftsPublic
+ *
+ * @param {any} personId id of the user whose wish list is being retrieved
+ * @returns {JSON array} the user's wish list
+ */
+export async function getWishlist(userId) {
+  const wishlist = await api.get(`gifts/${userId}/wishlist`);
+  return wishlist.data.data;
 }
 
-export async function getItem(userId, itemId) {
-  const allItems = await getWishlist(parseInt(userId));
-  const match = allItems.filter((item) => item.id === parseInt(itemId))[0];
-  return match ?? null;
+/** PATCH baseUrl/gifts/{gift_id} -> GiftPublic
+ *
+ * Toggles whether the gift has been marked by another user.
+ */
+export async function markItem(itemId) {
+  try {
+    const res = await api.patch(`/gifts/${itemId}`);
+    return res;
+  } catch (err) {
+    console.log("Error marking the gift: ", err);
+  }
+}
+
+/** GET baseUrl/gifts/{gift_id} -> GiftPublic
+ */
+export async function getItem(itemId) {
+  try {
+    const res = await api.get(`/gifts/${itemId}`);
+    return res;
+  } catch (err) {
+    console.log("Error retrieving gift: ", err);
+  }
+}
+
+/** GET baseUrl/gifts/me/{gift_id} -> GiftForOwner
+ */
+export async function getMyItem(itemId) {
+  try {
+    const res = await api.get(`/gifts/me/${itemId}`);
+    return res;
+  } catch (err) {
+    console.log("Error retrieving gift: ", err);
+  }
 }
 
 export async function getMyId() {
   return 1;
-}
-
-export async function nameIsUnique(newName) {
-  const people = await getPeopleData();
-  for (const person of people) {
-    if (newName === person.displayName) {
-      return false;
-    }
-  }
-  return true;
-}
-
-export async function changeDisplayName(userId, newName) {
-  const people = await getPeopleData();
-  const user = people.filter((person) => person.id === userId)[0];
-  user.displayName = newName;
-  writePeopleData(people);
 }
 
 export async function createItem(userId, what, itemLink, details = "") {
@@ -199,25 +210,6 @@ export async function editItem(userId, itemId, updates) {
     .items;
   const item = wishlist.filter((item) => item.id === parseInt(itemId))[0];
   Object.assign(item, updates);
-  writeWishlistsData(allWishlists);
-}
-
-export async function markItem(isMarked, personId, itemId, userId) {
-  const allWishlists = await getWishlistsData();
-  const allItems = allWishlists.filter((w) => w.id === parseInt(personId))[0]
-    .items;
-  const item = allItems.filter((item) => item.id === parseInt(itemId))[0];
-
-  if (isMarked) {
-    // Update item to be marked by the current user.
-    item.marked = true;
-    item.markedBy = parseInt(userId);
-  } else {
-    // Update the item to be no longer marked.
-    item.marked = false;
-    item.markedBy = 0;
-  }
-
   writeWishlistsData(allWishlists);
 }
 

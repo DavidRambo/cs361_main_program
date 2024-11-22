@@ -1,22 +1,25 @@
 import { useLoaderData } from "react-router-dom";
 
 import Item from "../components/item";
-import { getDisplayName, getMyId, getWishlist } from "../fetchers";
+import { getMe, getUser, getWishlist } from "../fetchers";
 
 export async function loader({ params }) {
-  const personId = parseInt(params.personId);
-  const name = await getDisplayName(personId);
-  const items = await getWishlist(personId);
-  const userId = await getMyId();
-  return { name, personId, items, userId };
+  const user = await getUser(params.userId);
+  const items = await getWishlist(params.userId);
+  const myself = await getMe();
+  return {
+    user,
+    items,
+    myself,
+  };
 }
 
 export default function Wishlist() {
-  const { name, personId, items, userId } = useLoaderData();
+  const { user, items, myself } = useLoaderData();
 
   return (
     <div className="wishlist">
-      <h1>{name}'s Wish List</h1>
+      <h1>{user.display_name}'s Wish List</h1>
       <p>
         To commit to giving a gift, mark the checkbox on the left. You can
         always come back and unmark it. The recipient won't know that they're
@@ -24,7 +27,7 @@ export default function Wishlist() {
       </p>
       <ul>
         {items.map((item) => (
-          <Item key={item.id} item={item} personId={personId} myId={userId} />
+          <Item key={item.id} item={item} myId={myself.id} />
         ))}
       </ul>
     </div>

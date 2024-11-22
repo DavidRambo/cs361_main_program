@@ -15,7 +15,7 @@ export default function MyItem({ item }) {
         <div id="list-what">{item.what}</div>
 
         <div id="list-button-container">
-          {item.details === "" ? (
+          {item.details === null ? (
             <button
               className="noDetails"
               onClick={(event) => event.preventDefault()}
@@ -39,19 +39,18 @@ export default function MyItem({ item }) {
         </div>
       </div>
 
-      <div>
-        <ProductLink itemLink={item.link} />
-      </div>
+      <div>{item.link !== null && <ProductLink itemLink={item.link} />}</div>
 
       <div className={hidden ? "hidden" : "revealed"}>
-        {item.details.split("\n").map((portion, i) => {
-          return (
-            <span key={i}>
-              {portion}
-              <br />
-            </span>
-          );
-        })}
+        {item.details !== null &&
+          item.details.split("\n").map((portion, i) => {
+            return (
+              <span key={i}>
+                {portion}
+                <br />
+              </span>
+            );
+          })}
       </div>
     </li>
   );

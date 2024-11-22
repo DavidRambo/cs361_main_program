@@ -2,16 +2,14 @@ import { Link, useLoaderData } from "react-router-dom";
 
 import MyItem from "../components/myItem";
 
-import { getMyId, getWishlist } from "../fetchers";
+import { getMyWishlist } from "../fetchers";
 
 export async function loader() {
-  const userId = await getMyId();
-  const match = await getWishlist(userId);
-  return match;
+  return await getMyWishlist();
 }
 
 export default function MyWishlist() {
-  const items = useLoaderData();
+  const gifts = useLoaderData();
 
   return (
     <div className="wishlist">
@@ -27,7 +25,7 @@ export default function MyWishlist() {
       </ul>
 
       <ul>
-        {items.map((item) => (
+        {gifts.map((item) => (
           <MyItem key={item.id} item={item} />
         ))}
       </ul>

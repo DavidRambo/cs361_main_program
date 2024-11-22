@@ -88,7 +88,7 @@ const router = createBrowserRouter([
             action: changeNameAction,
           },
           {
-            path: "/wishlists/:personId",
+            path: "/wishlists/:userId",
             element: <Wishlist />,
             loader: wishlistLoader,
           },

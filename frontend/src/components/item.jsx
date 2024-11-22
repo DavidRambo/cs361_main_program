@@ -1,22 +1,33 @@
 import React from "react";
 
 import ProductLink from "./productLink";
-import { markItem } from "../fetchers";
+import { getItem, markItem } from "../fetchers";
 
-export default function Item({ item, personId, myId }) {
+export default function Item({ item, myId }) {
+  // For revealing "More Details".
   const [hidden, setHidden] = React.useState(true);
-  const [marked, setMarked] = React.useState(item.marked);
-  const [checkedBy, setCheckedBy] = React.useState(item.markedBy);
 
-  // For marking and unmarking radio inputs next to each item, try useFetcher:
-  // https://reactrouter.com/en/main/hooks/use-fetcher
+  // For toggling the marked checkbox.
+  const [gift, setGift] = React.useState(item);
+  const [marked, setMarked] = React.useState(gift.marked);
+  const [markedBy, setMarkedBy] = React.useState(gift.marked_by);
 
-  const changeCheckedBy = (isMarked) => {
-    if (isMarked) {
-      setCheckedBy(myId);
-    } else {
-      setCheckedBy(0);
+  React.useEffect(() => {
+    async function runEffect() {
+      const newGift = await getItem(item.id);
+      console.log(newGift.data);
+      setGift(newGift.data);
     }
+    runEffect();
+  }, []);
+
+  const toggleMarked = () => {
+    async function runToggle() {
+      const markedGift = await markItem(item.id);
+      setGift(markedGift.data);
+      setMarked(markedGift.data.marked ? true : false);
+    }
+    runToggle();
   };
 
   return (
@@ -34,21 +45,19 @@ export default function Item({ item, personId, myId }) {
                 : "Call dibs on giving this gift"
             }
             checked={marked === true}
-            disabled={checkedBy === 0 || checkedBy === myId ? "" : "disabled"}
+            disabled={markedBy === null || markedBy === myId ? "" : "disabled"}
             onChange={() => {
-              setMarked(marked ? false : true);
-              markItem(marked ? false : true, personId, item.id, myId);
-              changeCheckedBy(marked ? false : true);
+              toggleMarked();
             }}
           />
         </div>
 
         <div id="list-what" className={marked ? "marked" : "unmarked"}>
-          {item.what}
+          {gift.what}
         </div>
 
         <div id="list-button-container">
-          {item.details === "" ? (
+          {gift.details === null ? (
             <button
               className="noDetails"
               onClick={(event) => event.preventDefault()}
@@ -69,19 +78,18 @@ export default function Item({ item, personId, myId }) {
         </div>
       </div>
 
-      <div>
-        <ProductLink itemLink={item.link} />
-      </div>
+      <div>{gift.link !== null && <ProductLink itemLink={gift.link} />}</div>
 
       <div className={hidden ? "hidden" : "revealed"}>
-        {item.details.split("\n").map((portion, i) => {
-          return (
-            <span key={i}>
-              {portion}
-              <br />
-            </span>
-          );
-        })}
+        {gift.details !== null &&
+          gift.details.split("\n").map((portion, i) => {
+            return (
+              <span key={i}>
+                {portion}
+                <br />
+              </span>
+            );
+          })}
       </div>
     </li>
   );
