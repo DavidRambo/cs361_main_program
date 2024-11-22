@@ -5,7 +5,6 @@ import { Form, Link, redirect } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
 export async function action({ request }) {
-  console.log(">>> Register action");
   const formData = await request.formData();
 
   const displayName = formData.get("displayName");
@@ -13,8 +12,6 @@ export async function action({ request }) {
   const password = formData.get("password");
 
   const regCode = formData.get("regCode");
-
-  const data = new URLSearchParams({ displayName, email, password });
 
   const regApi = axios.create({
     baseURL: import.meta.env.VITE_API_URL, // sets URL in .env variable

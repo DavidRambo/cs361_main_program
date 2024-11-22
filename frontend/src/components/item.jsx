@@ -15,7 +15,6 @@ export default function Item({ item, myId }) {
   React.useEffect(() => {
     async function runEffect() {
       const newGift = await getItem(item.id);
-      console.log(newGift.data);
       setGift(newGift.data);
     }
     runEffect();
