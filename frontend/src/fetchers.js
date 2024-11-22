@@ -97,6 +97,11 @@ export async function getMyWishlist() {
   }
 }
 
+/** GET baseUrl/gifts/gift_id -> JSON of GiftPublic or GiftForOwner
+ *
+ * Retrieves the gift with the specified id, which will have the appropriate
+ * properties depending on whether the logged-in user owns that gift.
+ */
 export async function getGift(id) {
   try {
     const res = await api.get(`/gifts/${id}`);
