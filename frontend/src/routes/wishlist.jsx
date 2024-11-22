@@ -10,7 +10,7 @@ export async function loader({ params }) {
   return {
     user,
     items,
-    myself,
+    myself, // Passed to each Item component to determine checkbox toggleability.
   };
 }
 
