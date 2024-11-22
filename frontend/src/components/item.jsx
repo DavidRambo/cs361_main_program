@@ -11,7 +11,7 @@
 import React from "react";
 
 import ProductLink from "./productLink";
-import { getItem, markItem } from "../fetchers";
+import { getGift, markItem } from "../fetchers";
 
 export default function Item({ item, myId }) {
   // For revealing "More Details".
@@ -24,7 +24,7 @@ export default function Item({ item, myId }) {
 
   React.useEffect(() => {
     async function runEffect() {
-      const newGift = await getItem(item.id);
+      const newGift = await getGift(item.id);
       setGift(newGift.data);
     }
     runEffect();

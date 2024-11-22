@@ -157,7 +157,7 @@ export async function markItem(itemId) {
 
 /** GET baseUrl/gifts/{gift_id} -> GiftPublic
  */
-export async function getItem(itemId) {
+export async function getGift(itemId) {
   try {
     const res = await api.get(`/gifts/${itemId}`);
     return res;
