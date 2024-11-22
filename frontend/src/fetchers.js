@@ -166,17 +166,6 @@ export async function getGift(itemId) {
   }
 }
 
-/** GET baseUrl/gifts/me/{gift_id} -> GiftForOwner
- */
-export async function getMyItem(itemId) {
-  try {
-    const res = await api.get(`/gifts/me/${itemId}`);
-    return res;
-  } catch (err) {
-    console.log("Error retrieving gift: ", err);
-  }
-}
-
 export async function getMyId() {
   return 1;
 }
