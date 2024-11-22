@@ -1,3 +1,13 @@
+/** Marking and unmarking a gift item is currently handled with React state and
+ * a useEffect hook. I had wanted to use react-router's useFetcher. In order
+ * for that to work in this case, a route needs to be defined by which to load
+ * the gift item's data. I had forgotten than a route can be defined without a
+ * component. For example, see my route for "/mywishlist/edit/:itemId/delete",
+ * which has an action set. Should I refactor, then I can define a route for
+ * individual items, provide them with a loader, which can then be loaded via
+ * a route like fetcher.load("/gifts/:giftId"), and then use fetcher.submit().
+ */
+
 import React from "react";
 
 import ProductLink from "./productLink";
