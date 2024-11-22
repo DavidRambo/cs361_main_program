@@ -41,6 +41,30 @@ def get_wishlist(session: SessionDep, current_user: CurrentUser, user_id: int):
     return GiftsPublic(data=gifts)
 
 
+@router.get("/{gift_id}", response_model=GiftPublic)
+def get_gift(session: SessionDep, current_user: CurrentUser, gift_id: int):
+    """Gets a gift owned by a user other than the one who is logged in."""
+    gift: Gift = session.get(Gift, gift_id)
+    if gift.owner_id == current_user.id:
+        raise fastapi.HTTPException(
+            status_code=fastapi.status.HTTP_403_FORBIDDEN,
+            detail="You cannot view your own gift in this way.",
+        )
+    return gift
+
+
+@router.get("/me/{gift_id}", response_model=GiftForOwner)
+def get_own_gift(session: SessionDep, current_user: CurrentUser, gift_id: int):
+    """Gets a gift owned by the current user."""
+    gift: Gift = session.get(Gift, gift_id)
+    if gift.owner_id != current_user.id:
+        raise fastapi.HTTPException(
+            status_code=fastapi.status.HTTP_403_FORBIDDEN,
+            detail="You cannot view another user's gift in this way.",
+        )
+    return gift
+
+
 @router.post("/me", response_model=GiftForOwner)
 def create_gift(*, session: SessionDep, current_user: CurrentUser, gift_in: GiftCreate):
     """Create a new gift for the logged-in user's wish list."""
