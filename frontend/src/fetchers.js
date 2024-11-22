@@ -178,9 +178,7 @@ export async function getMyId() {
  */
 export async function createGift(newGift) {
   try {
-    console.log("newGift = ", newGift);
     const res = await api.post("/gifts/me", newGift);
-    console.log("response: ", res);
     return res;
   } catch (err) {
     console.log("Error creating new gift: ", err);
@@ -192,7 +190,6 @@ export async function createGift(newGift) {
 export async function editGift(giftId, updates) {
   try {
     const res = await api.patch(`/gifts/me/${giftId}`, updates);
-    console.log("Edited gift response = ", res.data);
   } catch (err) {
     console.log("Error editing gift: ", err);
   }
