@@ -2,24 +2,33 @@ import React from "react";
 import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { Form } from "react-router-dom";
 
-import { editItem, getItem, getMyId } from "../fetchers";
+import { editGift, getOwnGift } from "../fetchers";
+import { validateURL } from "../utils";
 
 export async function loader({ params }) {
-  const userId = await getMyId();
-  const item = await getItem(userId, parseInt(params.itemId));
-  return { userId, item };
+  const gift = await getOwnGift(params.itemId);
+  return { gift };
 }
 
 export async function action({ request }) {
   const formData = await request.formData();
-  const updates = Object.fromEntries(formData);
+  const { hiddenGiftId, itemLink, ...updates } = Object.fromEntries(formData);
 
-  await editItem(updates.hiddenUserId, updates.hiddenItemId, updates);
+  if (itemLink !== "") {
+    if (validateURL(itemLink)) {
+      updates.link = itemLink;
+    } else {
+      alert("Your product link should start with `https://`");
+      return redirect(`/mywishlist/edit/${hiddenGiftId}`);
+    }
+  }
+
+  await editGift(hiddenGiftId, updates);
   return redirect(`/mywishlist`);
 }
 
 export default function EditItem() {
-  const { userId, item } = useLoaderData();
+  const { gift } = useLoaderData();
   const navigate = useNavigate();
 
   return (
@@ -32,38 +41,31 @@ export default function EditItem() {
           name="what"
           type="text"
           className="itemText"
-          defaultValue={item.what}
+          defaultValue={gift.what}
         />
 
         <p>Want to provide a URL to the item?</p>
         <input
           type="text"
           name="itemLink"
-          aria-label="Enter a URL for the item."
+          aria-label="Enter a URL for the gift."
           className="itemText"
-          defaultValue={item.link}
+          defaultValue={gift.link}
         />
 
         <p>Anything else that would help the gift giver?</p>
         <textarea
           name="details"
           className="itemTextArea"
-          defaultValue={item.details}
+          defaultValue={gift.details}
         />
 
         <input
-          name="hiddenUserId"
+          name="hiddenGiftId"
           type="number"
           readOnly
           hidden
-          value={userId}
-        />
-        <input
-          name="hiddenItemId"
-          type="number"
-          readOnly
-          hidden
-          value={item.id}
+          value={gift.id}
         />
 
         <div id="form-buttons">

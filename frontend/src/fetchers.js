@@ -97,14 +97,14 @@ export async function getMyWishlist() {
   }
 }
 
-/** GET baseUrl/gifts/gift_id -> JSON of GiftPublic or GiftForOwner
+/** GET baseUrl/gifts/me/gift_id -> JSON of GiftForOwner
  *
- * Retrieves the gift with the specified id, which will have the appropriate
- * properties depending on whether the logged-in user owns that gift.
+ * Retrieves the gift with the specified id if it belongs to the currently
+ * logged-in user.
  */
-export async function getGift(id) {
+export async function getOwnGift(id) {
   try {
-    const res = await api.get(`/gifts/${id}`);
+    const res = await api.get(`/gifts/me/${id}`);
     return res.data;
   } catch (err) {
     console.log("Error retrieving gift: ", err);
@@ -195,6 +195,17 @@ export async function createGift(newGift) {
     return res;
   } catch (err) {
     console.log("Error creating new gift: ", err);
+  }
+}
+
+/** PATCH /gifts/me/{gift_id} -> JSON of GiftForOwner
+ */
+export async function editGift(giftId, updates) {
+  try {
+    const res = await api.patch(`/gifts/me/${giftId}`, updates);
+    console.log("Edited gift response = ", res.data);
+  } catch (err) {
+    console.log("Error editing gift: ", err);
   }
 }
 
