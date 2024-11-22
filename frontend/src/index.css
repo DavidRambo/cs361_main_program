@@ -125,7 +125,8 @@ body {
 }
 
 #sidebar {
-  width: 14rem;
+  min-width: 12rem;
+  max-width: 14rem;
   background-color: #f7f7f7;
   border-right: solid 1px #e3e3e3;
   display: flex;
@@ -133,8 +134,8 @@ body {
 }
 
 #sidebar > * {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 #sidebar > div {
@@ -258,6 +259,7 @@ h2 {
 
 #my-list-button {
   margin: 0.25rem 0;
+  text-wrap: wrap;
 }
 #my-list-button a.active span {
   color: inherit;
