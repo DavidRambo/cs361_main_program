@@ -129,8 +129,12 @@ export async function getPeople(selfId, search) {
  * @returns {JSON array} the user's wish list
  */
 export async function getWishlist(userId) {
-  const wishlist = await api.get(`gifts/${userId}/wishlist`);
-  return wishlist.data.data;
+  try {
+    const wishlist = await api.get(`gifts/${userId}/wishlist`);
+    return wishlist.data.data;
+  } catch (err) {
+    console.log("Error retrieving a user's wishlist: ", err);
+  }
 }
 
 /** PATCH baseUrl/gifts/{gift_id} -> GiftPublic
