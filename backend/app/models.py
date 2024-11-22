@@ -120,7 +120,13 @@ class GiftForOwner(GiftBase):
 
 
 class GiftUpdate(GiftBase):
-    """Properties to receive upon updating a Gift."""
+    """Properties to receive upon updating a Gift.
+
+    Optional attributes:
+        what: str
+        link: UrlStr
+        details: str
+    """
 
     what: str | None = Field(default=None, min_length=1, max_length=255)
 
