@@ -14,7 +14,7 @@ import api from "./api";
 export async function getUser(userId) {
   try {
     const res = await api.get(`/users/${userId}`);
-    return res;
+    return res.data;
   } catch (err) {
     console.log("Error: ", err);
   }
