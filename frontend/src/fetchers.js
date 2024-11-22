@@ -184,6 +184,23 @@ export async function getMyId() {
   return 1;
 }
 
+/** POST baseUrl/gifts/me -> GiftForOwner
+ *
+ * Request body: JSON with `what` and optionally `link` and `details`
+ *
+ * Returns JSON with schema: {what, link, details, id}
+ */
+export async function createGift(newGift) {
+  try {
+    console.log("newGift = ", newGift);
+    const res = await api.post("/gifts/me", newGift);
+    console.log("response: ", res);
+    return res;
+  } catch (err) {
+    console.log("Error creating new gift: ", err);
+  }
+}
+
 export async function createItem(userId, what, itemLink, details = "") {
   const allWishlists = await getWishlistsData();
   const wishlist = allWishlists.filter((wishlist) => wishlist.id === userId)[0]
