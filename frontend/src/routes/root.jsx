@@ -19,7 +19,7 @@ export async function loader({ request }) {
   const search_query = url.searchParams.get("search");
 
   const myself = await getMe();
-  const users = await getUsers();
+  const users = await getUsers(search_query);
 
   return { myself, users, search_query };
 }
@@ -39,9 +39,9 @@ export default function Root() {
     new URLSearchParams(navigation.location.search).has("search");
 
   // Synchronize search field's value with url parameter.
-  // React.useEffect(() => {
-  //   document.getElementById("search").value = search_query;
-  // }, [search_query]);
+  React.useEffect(() => {
+    document.getElementById("search").value = search_query;
+  }, [search_query]);
 
   return (
     <>

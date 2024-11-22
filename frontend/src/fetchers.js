@@ -33,12 +33,17 @@ export async function getUser(userId) {
  *  },
  *  ]
  */
-export async function getUsers() {
+export async function getUsers(search) {
   try {
     const res = await api.get("/users");
-    return res.data.data;
+    if (search) {
+      console.log(`Searching ${search} in ${res.data.data}`);
+      return matchSorter(res.data.data, search, { keys: ["display_name"] });
+    } else {
+      return res.data.data;
+    }
   } catch (err) {
-    console.log("Error: ", err);
+    console.log("Error retrieving users: ", err);
   }
 }
 
@@ -113,14 +118,14 @@ export async function getOwnGift(id) {
 
 /** Returns a list of other users' ids and displayNames.
  *
- * @param {Number} selfId primary key of the logged-in user
+ * @param {Number} myId primary key of the logged-in user
  * @param {String} search string to match with user name
  * @returns {JSON array} array of objects comprising the id
  *   and displayName of users other than the logged-in user
  */
-export async function getPeople(selfId, search) {
+export async function getPeople(myId, search) {
   const people = await getPeopleData();
-  let otherPeople = people.filter((person) => person.id != selfId);
+  let otherPeople = people.filter((person) => person.id != myId);
   if (!otherPeople) otherPeople = [];
   if (search) {
     otherPeople = matchSorter(otherPeople, search, { keys: ["displayName"] });
