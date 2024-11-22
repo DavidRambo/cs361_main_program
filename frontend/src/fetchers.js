@@ -209,36 +209,13 @@ export async function editGift(giftId, updates) {
   }
 }
 
-export async function editItem(userId, itemId, updates) {
-  const allWishlists = await getWishlistsData();
-  const wishlist = allWishlists.filter((w) => w.id === parseInt(userId))[0]
-    .items;
-  const item = wishlist.filter((item) => item.id === parseInt(itemId))[0];
-  Object.assign(item, updates);
-  writeWishlistsData(allWishlists);
-}
-
+/** DELETE /gifts/{gift_id} -> String
+ */
 export async function deleteGift(giftId) {
   try {
     const res = await api.delete(`/gifts/${giftId}`);
     return res; // "Gift deleted."
   } catch (err) {
     console.log("Failed to delete item. Error: ", err);
-  }
-}
-
-export async function deleteItem(itemId) {
-  const userId = await getMyId();
-
-  const allWishlists = await getWishlistsData();
-  const wishlist = allWishlists.filter((w) => w.id === userId)[0].items;
-
-  const indexToDelete = wishlist.findIndex((item) => item.id === itemId);
-
-  if (indexToDelete === -1) {
-    console.log("Failed to delete item: item now found.");
-  } else {
-    let deletedItem = wishlist.splice(indexToDelete, indexToDelete);
-    writeWishlistsData(allWishlists);
   }
 }
