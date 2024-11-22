@@ -106,18 +106,6 @@ export async function getGift(id) {
   }
 }
 
-async function getWishlistsData() {
-  try {
-    return JSON.parse(localStorage.getItem("WishlistsData"));
-  } catch (err) {
-    console.log("Failed to parse JSON: ", err);
-  }
-}
-
-async function writeWishlistsData(data) {
-  localStorage.setItem("WishlistsData", JSON.stringify(data));
-}
-
 /** Returns a list of other users' ids and displayNames.
  *
  * @param {Number} selfId primary key of the logged-in user
@@ -199,26 +187,6 @@ export async function createGift(newGift) {
   } catch (err) {
     console.log("Error creating new gift: ", err);
   }
-}
-
-export async function createItem(userId, what, itemLink, details = "") {
-  const allWishlists = await getWishlistsData();
-  const wishlist = allWishlists.filter((wishlist) => wishlist.id === userId)[0]
-    .items;
-
-  // Determine its id based on last id in mock db array
-  const itemId = wishlist[wishlist.length - 1].id + 1;
-
-  // Store in wishlist.
-  wishlist.push({
-    id: itemId,
-    what: what,
-    link: itemLink,
-    details: details,
-    marked: false,
-    markedBy: 0,
-  });
-  writeWishlistsData(allWishlists);
 }
 
 export async function editItem(userId, itemId, updates) {
