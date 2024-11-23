@@ -189,6 +189,12 @@ export async function createGift(newGift) {
   }
 }
 
+export async function createGiftsFromArray(gifts) {
+  for (const gift of gifts) {
+    const _ = await createGift(gift);
+  }
+}
+
 /** PATCH /gifts/me/{gift_id} -> JSON of GiftForOwner
  */
 export async function editGift(giftId, updates) {

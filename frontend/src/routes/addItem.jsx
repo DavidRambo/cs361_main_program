@@ -40,8 +40,31 @@ export default function AddItem() {
   return (
     <>
       <div className="item-entry">
+        <h2>Add a Gift Idea to Your Wish List</h2>
+
+        <p>You can add multiple gift ideas at once:</p>
+        <div id="form-buttons">
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/mywishlist/csv-upload");
+            }}
+          >
+            Upload CSV
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/mywishlist/bulk-text-upload");
+            }}
+          >
+            Bulk Text Upload
+          </button>
+        </div>
+        <p>Or enter an individual item's details below.</p>
+
         <Form method="post" id="item-form">
-          <h2>Add a Gift Idea to Your Wish List</h2>
           <p>What is it?</p>
           <input
             type="text"
