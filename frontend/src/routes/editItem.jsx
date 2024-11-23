@@ -21,6 +21,8 @@ export async function action({ request }) {
       alert("Your product link should start with `https://`");
       return redirect(`/mywishlist/edit/${hiddenGiftId}`);
     }
+  } else {
+    updates.link = null;
   }
 
   await editGift(hiddenGiftId, updates);
