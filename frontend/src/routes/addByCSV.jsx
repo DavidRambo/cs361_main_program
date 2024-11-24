@@ -1,4 +1,4 @@
-import { Form, redirect } from "react-router-dom";
+import { Form, redirect, useNavigate } from "react-router-dom";
 import { createGiftsFromArray } from "../fetchers";
 
 const url = "http://localhost:3000/upload-csv";
@@ -18,25 +18,36 @@ export async function action({ request }) {
 
   const csv_data = await res.json();
 
-  // console.log("res.json() = ", csv_data);
-
   await createGiftsFromArray(csv_data);
 
   return redirect("/mywishlist");
 }
 
 export default function AddByCSV() {
+  const navigate = useNavigate();
+
   return (
-    <Form method="post" encType="multipart/form-data">
-      <p>
-        <label htmlFor="file">Select a CSV file to upload:</label>
-      </p>
+    <div className="item-entry">
+      <Form method="post" encType="multipart/form-data">
+        <p>
+          <label htmlFor="file">Select a CSV file to upload:</label>
+        </p>
 
-      <input type="file" name="file" />
+        <input type="file" name="file" />
 
-      <div id="form-buttons">
-        <button type="submit">Submit</button>
-      </div>
-    </Form>
+        <div id="form-buttons">
+          <button type="submit">Submit</button>
+
+          <button
+            type="button"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </Form>
+    </div>
   );
 }
