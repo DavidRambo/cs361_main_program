@@ -12,7 +12,10 @@ import Login, { action as loginAction } from "./routes/login";
 import Register, { action as registerAction } from "./routes/register";
 import Root, { loader as rootLoader } from "./routes/root";
 import ErrorPage from "./error-page";
-import MyWishlist, { loader as myWishlistLoader } from "./routes/myWishlist";
+import MyWishlist, {
+  loader as myWishlistLoader,
+  clientAction as myWishlistAction,
+} from "./routes/myWishlist";
 import Wishlist, { loader as wishlistLoader } from "./routes/wishlist";
 import Index from "./routes";
 import ChangeName, {
@@ -26,6 +29,7 @@ import EditItem, {
 } from "./routes/editItem";
 import { action as deleteAction } from "./routes/delete";
 import AddByCSV, { action as uploadCSVAction } from "./routes/addByCSV";
+import { action as exportCSVAction } from "./routes/exportToCSV";
 import AddBulkText from "./routes/addBulkText";
 
 function Logout() {
@@ -71,6 +75,7 @@ const router = createBrowserRouter([
             path: "/mywishlist",
             element: <MyWishlist />,
             loader: myWishlistLoader,
+            action: myWishlistAction,
           },
           {
             path: "/mywishlist/add",
@@ -83,6 +88,10 @@ const router = createBrowserRouter([
             action: uploadCSVAction,
           },
           {
+            path: "/mywishlist/csv-export",
+            action: exportCSVAction,
+          },
+          {
             path: "/mywishlist/bulk-text-upload",
             element: <AddBulkText />,
           },
@@ -93,6 +102,8 @@ const router = createBrowserRouter([
             action: editItemAction,
           },
           {
+            // The `delete` portion of the path is specified by the Form's `action`
+            // property in EditItem.
             path: "/mywishlist/edit/:itemId/delete",
             action: deleteAction,
           },
