@@ -6,7 +6,7 @@ import sqlmodel
 
 from app import crud
 from app.core.config import settings
-from app.models import User, UserCreate, Gift
+from app.models import User, UserCreate
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__name__))
