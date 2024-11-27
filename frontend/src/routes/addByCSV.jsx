@@ -1,7 +1,6 @@
 import { Form, redirect, useNavigate } from "react-router-dom";
 import { createGiftsFromArray } from "../fetchers";
-
-const url = "http://localhost:3000/upload-csv";
+import { csv_api } from "../api";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -11,12 +10,9 @@ export async function action({ request }) {
     return redirect("/mywishlist/csv-upload");
   }
 
-  const res = await fetch(url, {
-    method: "post",
-    body: formData,
-  });
+  const res = await csv_api.post("upload-csv", formData);
 
-  const csv_data = await res.json();
+  const csv_data = await res.data;
 
   await createGiftsFromArray(csv_data);
 
