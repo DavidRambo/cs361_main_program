@@ -182,10 +182,13 @@ export async function getMyId() {
  */
 export async function createGift(newGift) {
   try {
+    if (newGift.link === "") {
+      newGift.link = null;
+    }
     const res = await api.post("/gifts/me", newGift);
     return res;
   } catch (err) {
-    console.log("Error creating new gift: ", err);
+    console.log(`Error creating new gift, ${newGift}: `, err);
   }
 }
 
