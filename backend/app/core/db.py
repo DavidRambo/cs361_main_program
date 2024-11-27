@@ -29,5 +29,6 @@ def init_db(session: sqlmodel.Session) -> None:
             email=settings.FIRST_USER,
             password=settings.FIRST_USER_PASSWORD,
             display_name=settings.FIRST_USER_NAME,
+            reg_code=settings.REGISTRATION_CODE,
         )
         user = crud.create_user(session=session, user_create=user_in)
