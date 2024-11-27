@@ -200,6 +200,7 @@ export async function createGiftsFromArray(gifts) {
 export async function editGift(giftId, updates) {
   try {
     const res = await api.patch(`/gifts/me/${giftId}`, updates);
+    return res;
   } catch (err) {
     console.log("Error editing gift: ", err);
   }
