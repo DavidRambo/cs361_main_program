@@ -1,17 +1,16 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Form, Link, useLoaderData } from "react-router-dom";
 
 import MyItem from "../components/myItem";
 
-import { getMyId, getWishlist } from "../fetchers";
+import { getMyWishlist } from "../fetchers";
+import { csv_api } from "../api";
 
 export async function loader() {
-  const userId = await getMyId();
-  const match = await getWishlist(userId);
-  return match;
+  return await getMyWishlist();
 }
 
 export default function MyWishlist() {
-  const items = useLoaderData();
+  const gifts = useLoaderData();
 
   return (
     <div className="wishlist">
@@ -27,9 +26,43 @@ export default function MyWishlist() {
       </ul>
 
       <ul>
-        {items.map((item) => (
+        {gifts.map((item) => (
           <MyItem key={item.id} item={item} />
         ))}
+      </ul>
+
+      <ul id="my-wishlist-buttons">
+        <li>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              const sendToService = async (gdata) => {
+                try {
+                  const gjson = gdata.map((g) => {
+                    return { what: g.what, link: g.link, details: g.details };
+                  });
+                  const res = await csv_api.post("convert-to-csv", gjson);
+                  console.log(res.data);
+
+                  const blob = new Blob([res.data]);
+                  const url = window.URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.setAttribute("download", "output.csv");
+                  document.body.appendChild(link);
+                  link.click();
+                  link.parentNode.removeChild(link);
+                } catch (err) {
+                  console.log("Error converting wish list to CSV.");
+                }
+              };
+              sendToService(gifts);
+            }}
+          >
+            Export to CSV
+          </button>
+        </li>
       </ul>
     </div>
   );

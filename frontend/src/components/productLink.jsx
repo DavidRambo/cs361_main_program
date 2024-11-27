@@ -1,12 +1,6 @@
-export default function ProductLink({ itemLink }) {
-  function validateURL(itemLink) {
-    if (itemLink.startsWith("https://")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+import { validateURL } from "../utils";
 
+export default function ProductLink({ itemLink }) {
   return (
     <>
       {itemLink === "" ? (

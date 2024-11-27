@@ -1,8 +1,15 @@
 import React from "react";
 import * as ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import "./index.css";
 
+import ProtectedRoute from "./components/protectedRoute";
+import Login, { action as loginAction } from "./routes/login";
+import Register, { action as registerAction } from "./routes/register";
 import Root, { loader as rootLoader } from "./routes/root";
 import ErrorPage from "./error-page";
 import MyWishlist, { loader as myWishlistLoader } from "./routes/myWishlist";
@@ -18,11 +25,34 @@ import EditItem, {
   loader as editItemLoader,
 } from "./routes/editItem";
 import { action as deleteAction } from "./routes/delete";
+import AddByCSV, { action as uploadCSVAction } from "./routes/addByCSV";
+import AddBulkText from "./routes/addBulkText";
+
+function Logout() {
+  localStorage.clear();
+  return <Navigate to="/login" />;
+}
 
 const router = createBrowserRouter([
   {
+    path: "/register",
+    element: <Register />,
+    errorElement: <ErrorPage />,
+    action: registerAction,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <ErrorPage />,
+    action: loginAction,
+  },
+  {
     path: "/",
-    element: <Root />,
+    element: (
+      <ProtectedRoute>
+        <Root />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     loader: rootLoader,
     children: [
@@ -32,6 +62,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Index />,
+          },
+          {
+            path: "/logout",
+            element: <Logout />,
           },
           {
             path: "/mywishlist",
@@ -44,12 +78,23 @@ const router = createBrowserRouter([
             action: addItemAction,
           },
           {
+            path: "/mywishlist/csv-upload",
+            element: <AddByCSV />,
+            action: uploadCSVAction,
+          },
+          {
+            path: "/mywishlist/bulk-text-upload",
+            element: <AddBulkText />,
+          },
+          {
             path: "/mywishlist/edit/:itemId",
             element: <EditItem />,
             loader: editItemLoader,
             action: editItemAction,
           },
           {
+            // The `delete` portion of the path is specified by the Form's `action`
+            // property in EditItem.
             path: "/mywishlist/edit/:itemId/delete",
             action: deleteAction,
           },
@@ -60,7 +105,7 @@ const router = createBrowserRouter([
             action: changeNameAction,
           },
           {
-            path: "/wishlists/:personId",
+            path: "/wishlists/:userId",
             element: <Wishlist />,
             loader: wishlistLoader,
           },

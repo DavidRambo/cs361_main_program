@@ -125,7 +125,8 @@ body {
 }
 
 #sidebar {
-  width: 14rem;
+  min-width: 12rem;
+  max-width: 14rem;
   background-color: #f7f7f7;
   border-right: solid 1px #e3e3e3;
   display: flex;
@@ -133,8 +134,8 @@ body {
 }
 
 #sidebar > * {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 #sidebar > div {
@@ -258,6 +259,7 @@ h2 {
 
 #my-list-button {
   margin: 0.25rem 0;
+  text-wrap: wrap;
 }
 #my-list-button a.active span {
   color: inherit;
@@ -334,7 +336,7 @@ h2 {
   background: #e3e3e3;
 }
 
-#change-name-form {
+.form-container {
   max-width: 30rem;
   height: 16rem;
 
@@ -343,8 +345,14 @@ h2 {
   justify-content: flex-start;
   align-items: center;
 }
-#change-name-form * {
+.form-container * {
   margin-bottom: 1rem;
+}
+
+.form-input-label {
+  margin-right: auto;
+  margin-left: 10px;
+  padding-left: 10px;
 }
 
 input,
@@ -354,6 +362,35 @@ textarea {
 
 textarea {
   white-space: pre-line;
+}
+
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-content: center;
+  min-width: 440px;
+  margin: 2rem;
+}
+
+.auth-form {
+  max-width: 30rem;
+  height: 16rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.auth-form * {
+  margin-bottom: 1rem;
+}
+
+#regButton {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  /* max-width: 120px; */
 }
 
 .wishlist {
@@ -440,6 +477,7 @@ textarea {
 }
 
 .buttonLink {
+  text-align: center;
   text-decoration: none;
   font-size: 1rem;
   font-family: inherit;

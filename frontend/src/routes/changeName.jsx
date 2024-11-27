@@ -1,17 +1,11 @@
 import { Form, redirect, useLoaderData, useNavigate } from "react-router-dom";
 
-import {
-  changeDisplayName,
-  getDisplayName,
-  getMyId,
-  nameIsUnique,
-} from "../fetchers";
+import { changeDisplayName, getMe, nameIsUnique } from "../fetchers";
 
 // Load current display name.
 export async function loader() {
-  const myId = await getMyId();
-  const displayName = await getDisplayName(myId);
-  return displayName;
+  const myself = await getMe();
+  return myself.display_name;
 }
 
 export async function action({ request }) {
@@ -23,12 +17,11 @@ export async function action({ request }) {
   if (newName === "") {
     alert("Your display name cannot be empty.");
     return redirect(`/mywishlist/change-name`);
-  } else if ((await nameIsUnique(newName)) === false) {
+  } else if (!(await nameIsUnique(newName))) {
     alert("Your display name must be unique.");
     return redirect(`/mywishlist/change-name`);
   } else {
-    const myId = await getMyId();
-    await changeDisplayName(myId, newName);
+    await changeDisplayName(newName);
     return redirect(`/mywishlist`);
   }
 }
@@ -38,7 +31,7 @@ export default function ChangeName() {
   const navigate = useNavigate();
 
   return (
-    <div id="change-name-form">
+    <div className="form-container">
       <Form method="post">
         <p>Enter your new display name:</p>
 

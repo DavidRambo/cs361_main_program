@@ -1,21 +1,36 @@
 import React from "react";
 import { Form, redirect, useNavigate } from "react-router-dom";
 
-import { createItem, getMyId } from "../fetchers";
+import { createGift } from "../fetchers";
+import { validateURL } from "../utils";
 
 export async function action({ request }) {
   const formData = await request.formData();
 
-  const what = formData.get("what");
-  const itemLink = formData.get("itemLink");
-  const details = formData.get("details");
+  const newGift = {};
+  newGift.what = formData.get("what");
 
-  if (what === "") {
+  if (newGift.what === "") {
     alert("You have to ask for something.");
     return redirect(`/mywishlist/add`);
   }
 
-  createItem(await getMyId(), what, itemLink, details);
+  const link = formData.get("itemLink");
+  if (link !== "") {
+    if (validateURL(link)) {
+      newGift.link = formData.get("itemLink");
+    } else {
+      alert("Your product link should start with `https://`");
+      return redirect(`/mywishlist/add`);
+    }
+  }
+
+  const details = formData.get("details");
+  if (details !== "") {
+    newGift.details = formData.get("details");
+  }
+
+  await createGift(newGift);
   return redirect(`/mywishlist`);
 }
 
@@ -25,8 +40,31 @@ export default function AddItem() {
   return (
     <>
       <div className="item-entry">
+        <h2>Add a Gift Idea to Your Wish List</h2>
+
+        <p>You can add multiple gift ideas at once:</p>
+        <div id="form-buttons">
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/mywishlist/csv-upload");
+            }}
+          >
+            Upload CSV
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/mywishlist/bulk-text-upload");
+            }}
+          >
+            Bulk Text Upload
+          </button>
+        </div>
+        <p>Or enter an individual item's details below.</p>
+
         <Form method="post" id="item-form">
-          <h2>Add a Gift Idea to Your Wish List</h2>
           <p>What is it?</p>
           <input
             type="text"

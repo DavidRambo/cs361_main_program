@@ -8,32 +8,24 @@ import {
   useSubmit,
 } from "react-router-dom";
 
-import {
-  buildLocalData,
-  getPeople,
-  getMyId,
-  getDisplayName,
-} from "../fetchers";
+import { getUsers, getMe } from "../fetchers";
 
 /* Loads the names of the current user and other users, which are used in the
  * sidebar navigation links.
  */
 export async function loader({ request }) {
-  buildLocalData(); // Prepopulate local storage for dev/demo purposes.
-
   // Get search data.
   const url = new URL(request.url);
   const search_query = url.searchParams.get("search");
 
-  const myId = await getMyId();
-  const myself = await getDisplayName(myId);
-  const people = await getPeople(myId, search_query);
+  const myself = await getMe();
+  const users = await getUsers(search_query);
 
-  return { myself, people, search_query };
+  return { myself, users, search_query };
 }
 
 export default function Root() {
-  const { myself, people, search_query } = useLoaderData();
+  const { myself, users, search_query } = useLoaderData();
 
   // returns current navigation state: "idle" | "submitting" | "loading"
   const navigation = useNavigation();
@@ -61,7 +53,7 @@ export default function Root() {
               isActive ? "active" : isPending ? "pending" : ""
             }
           >
-            My List — {myself}
+            My List — {myself.display_name}
           </NavLink>
         </div>
 
@@ -89,13 +81,13 @@ export default function Root() {
         </div>
 
         <nav>
-          {people.length ? (
+          {users.length ? (
             <ul>
-              {people.map((person) => (
+              {users.map((person) => (
                 <li key={person.id}>
                   <NavLink to={`wishlists/${person.id}`}>
-                    {person.displayName ? (
-                      <>{person.displayName}</>
+                    {person.display_name ? (
+                      <>{person.display_name}</>
                     ) : (
                       <i>No Name</i>
                     )}{" "}
