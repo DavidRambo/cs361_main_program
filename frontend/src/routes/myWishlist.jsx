@@ -1,19 +1,9 @@
-import { Link, useFetcher, useLoaderData } from "react-router-dom";
+import { Form, Link, useLoaderData } from "react-router-dom";
 
 import MyItem from "../components/myItem";
 
 import { getMyWishlist } from "../fetchers";
 import { csv_api } from "../api";
-
-export async function clientAction({ request }) {
-  const formData = await request.formData();
-  const { gifts } = Object.fromEntries(formData);
-  console.log(gifts);
-  const res = await csv_api.get("convert-to-csv", formData.get("gifts"));
-  console.log(res.data);
-  // TODO: download res.attachment "output.csv"
-  return { ok: true };
-}
 
 export async function loader() {
   return await getMyWishlist();
@@ -21,7 +11,6 @@ export async function loader() {
 
 export default function MyWishlist() {
   const gifts = useLoaderData();
-  const fetcher = useFetcher();
 
   return (
     <div className="wishlist">
@@ -43,14 +32,36 @@ export default function MyWishlist() {
       </ul>
 
       <ul id="my-wishlist-buttons">
-        <fetcher.Form method="post">
-          <input name="gifts" value={gifts} hidden readOnly />
-          <button type="submit">Export to CSV</button>
-        </fetcher.Form>
         <li>
-          <Link to={`/mywishlist/csv-export`} wishlist={gifts}>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              const sendToService = async (gdata) => {
+                try {
+                  const gjson = gdata.map((g) => {
+                    return { what: g.what, link: g.link, details: g.details };
+                  });
+                  const res = await csv_api.post("convert-to-csv", gjson);
+                  console.log(res.data);
+
+                  const blob = new Blob([res.data]);
+                  const url = window.URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.setAttribute("download", "output.csv");
+                  document.body.appendChild(link);
+                  link.click();
+                  link.parentNode.removeChild(link);
+                } catch (err) {
+                  console.log("Error converting wish list to CSV.");
+                }
+              };
+              sendToService(gifts);
+            }}
+          >
             Export to CSV
-          </Link>
+          </button>
         </li>
       </ul>
     </div>

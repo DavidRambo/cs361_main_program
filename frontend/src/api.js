@@ -20,7 +20,7 @@ api.interceptors.request.use(
 );
 
 export const csv_api = axios.create({
-  baseURL: import.meta.env.CSV_API_URL,
+  baseURL: "http://localhost:3000/",
 });
 
 export default api;

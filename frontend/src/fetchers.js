@@ -1,6 +1,6 @@
 import { matchSorter } from "match-sorter";
 
-import api from "./api";
+import api, { csv_api } from "./api";
 
 /** GET baseURL/users/{user_id} -> JSON of UserPublic
  *
@@ -217,5 +217,14 @@ export async function deleteGift(giftId) {
     return res; // "Gift deleted."
   } catch (err) {
     console.log("Failed to delete item. Error: ", err);
+  }
+}
+
+export async function convertToCSV(gifts) {
+  try {
+    const res = await csv_api.post("convert-to-csv", gifts);
+    console.log(res);
+  } catch (err) {
+    console.log("Error converting wish list to CSV.");
   }
 }
