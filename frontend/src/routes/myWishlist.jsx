@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import MyItem from "../components/myItem";
 
 import { getMyWishlist } from "../fetchers";
-import { csv_api } from "../api";
+import { csv_api, text_api } from "../api";
 
 export async function loader() {
   return await getMyWishlist();
@@ -11,6 +11,42 @@ export async function loader() {
 
 export default function MyWishlist() {
   const gifts = useLoaderData();
+
+  const sendToService = async (gdata, service_name) => {
+    try {
+      const gjson = gdata.map((g) => {
+        return { what: g.what, link: g.link, details: g.details };
+      });
+      const output = {};
+      if (service_name === "csv") {
+        const res = await csv_api.post("convert-to-csv", gjson);
+        output.data = res.data;
+      } else if (service_name === "text") {
+        const data = { data: gjson };
+        console.log(data);
+        const res = await text_api.post("parse-wishlist", data);
+        output.data = res.data.text;
+      } else {
+        console.log("No service by that name.");
+        return;
+      }
+
+      const blob = new Blob([output.data]);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      if (service_name === "csv") {
+        link.setAttribute("download", "wishlist.csv");
+      } else if (service_name === "text") {
+        link.setAttribute("download", "wishlist.txt");
+      }
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      console.log(`Error converting wish list to ${service_name}.`);
+    }
+  };
 
   return (
     <div className="wishlist">
@@ -37,30 +73,22 @@ export default function MyWishlist() {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              const sendToService = async (gdata) => {
-                try {
-                  const gjson = gdata.map((g) => {
-                    return { what: g.what, link: g.link, details: g.details };
-                  });
-                  const res = await csv_api.post("convert-to-csv", gjson);
-                  console.log(res.data);
-
-                  const blob = new Blob([res.data]);
-                  const url = window.URL.createObjectURL(blob);
-                  const link = document.createElement("a");
-                  link.href = url;
-                  link.setAttribute("download", "output.csv");
-                  document.body.appendChild(link);
-                  link.click();
-                  link.parentNode.removeChild(link);
-                } catch (err) {
-                  console.log("Error converting wish list to CSV.");
-                }
-              };
-              sendToService(gifts);
+              sendToService(gifts, "csv");
             }}
           >
             Export to CSV
+          </button>
+        </li>
+
+        <li>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              sendToService(gifts, "text");
+            }}
+          >
+            Export to Plain Text
           </button>
         </li>
       </ul>
