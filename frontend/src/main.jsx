@@ -26,7 +26,7 @@ import EditItem, {
 } from "./routes/editItem";
 import { action as deleteAction } from "./routes/delete";
 import AddByCSV, { action as uploadCSVAction } from "./routes/addByCSV";
-import AddBulkText from "./routes/addBulkText";
+import AddBulkText, { action as bulkTextAction } from "./routes/addBulkText";
 
 function Logout() {
   localStorage.clear();
@@ -85,6 +85,7 @@ const router = createBrowserRouter([
           {
             path: "/mywishlist/bulk-text-upload",
             element: <AddBulkText />,
+            action: bulkTextAction,
           },
           {
             path: "/mywishlist/edit/:itemId",
