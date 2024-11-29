@@ -29,4 +29,4 @@ The port can be set by passing `--port <PORT>` to the above command.
 
 ### Users API
 
-### Wish Lists API
+### Gifts API
