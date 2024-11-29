@@ -12,8 +12,6 @@ export async function action({ request }) {
     return redirect("/mywishlist/bulk-text-upload");
   }
 
-  console.log(`Entries = ${entries}`);
-
   try {
     const res = await text_api.post("parse-text", entries);
     await createGiftsFromArray(res.data.data);
