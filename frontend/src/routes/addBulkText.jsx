@@ -1,16 +1,24 @@
 import { Form, redirect, useNavigate } from "react-router-dom";
 
 import { text_api } from "../api";
+import { createGiftsFromArray } from "../fetchers";
 
 export async function action({ request }) {
   const formData = await request.formData();
   const entries = Object.fromEntries(formData);
 
+  if (entries.text === "") {
+    alert("Be sure to include at least one gift idea.");
+    return redirect("/mywishlist/bulk-text-upload");
+  }
+
+  console.log(`Entries = ${entries}`);
+
   try {
     const res = await text_api.post("parse-text", entries);
-    console.log(res.data.data);
+    await createGiftsFromArray(res.data.data);
   } catch (err) {
-    console.log("Error requesting text parser: ", err);
+    alert("Something went wrong.");
     return redirect("/mywishlist/bulk-text-upload");
   }
   return redirect("/mywishlist");
