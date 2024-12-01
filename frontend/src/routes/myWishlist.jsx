@@ -2,7 +2,7 @@ import { Link, useLoaderData } from "react-router-dom";
 
 import MyItem from "../components/myItem";
 
-import { getMe, getMyWishlist } from "../fetchers";
+import { getMe, getMarkedGifts, getMyWishlist } from "../fetchers";
 import { csv_api, email_api, text_api } from "../api";
 
 export async function loader() {
@@ -11,6 +11,7 @@ export async function loader() {
 
 export default function MyWishlist() {
   const gifts = useLoaderData();
+  console.log(`Gifts count = ${gifts.length}`);
 
   const exportService = async (gdata, service_name) => {
     try {
@@ -47,7 +48,7 @@ export default function MyWishlist() {
     }
   };
 
-  const emailService = async (gifts) => {
+  const emailMyList = async (gifts) => {
     const myself = await getMe();
 
     const parse_response = await text_api.post("parse-wishlist", {
@@ -60,6 +61,34 @@ export default function MyWishlist() {
       recipient_name: myself.display_name,
       recipient_addr: myself.email,
       subject: "Here's your wish list.",
+      message: parse_response.data.text,
+    };
+
+    const res = await email_api.post("send-email", emailData);
+
+    if (res.status === 201) {
+      alert(`Email successfully sent to ${myself.email}`);
+    } else {
+      alert(`Email failed to send.`);
+    }
+  };
+
+  const emailOtherGifts = async () => {
+    const myself = await getMe();
+    const markedGifts = await getMarkedGifts();
+
+    console.log(markedGifts);
+
+    const parse_response = await text_api.post("parse-marked", {
+      data: markedGifts.data,
+    });
+
+    console.log("Parsed response: \n\n", parse_response.data);
+
+    const emailData = {
+      recipient_name: myself.display_name,
+      recipient_addr: myself.email,
+      subject: "Here are the gifts you've marked.",
       message: parse_response.data.text,
     };
 
@@ -120,29 +149,30 @@ export default function MyWishlist() {
       ) : (
         <br />
       )}
-        <li>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              exportService(gifts, "text");
-            }}
-          >
-            Export to Plain Text
-          </button>
-        </li>
-      </ul>
 
+      <h3>Email lists of gifts to myself:</h3>
       <ul id="my-wishlist-buttons">
         <li>
           <button
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              emailService(gifts);
+              emailMyList(gifts);
             }}
           >
-            Email my list to myself
+            My List
+          </button>
+        </li>
+
+        <li>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              emailOtherGifts();
+            }}
+          >
+            Gifts I'm Getting Others
           </button>
         </li>
       </ul>

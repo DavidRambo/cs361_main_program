@@ -129,6 +129,20 @@ export async function getWishlist(userId) {
   }
 }
 
+/** GET baseUrl/me/marked -> JSON array of GiftsForOwner
+ *
+ * Returns a list of the gifts the logged-in user has marked on others' lists.
+ */
+export async function getMarkedGifts() {
+  try {
+    const res = await api.get("/gifts/marked");
+    console.log(`Marked Gifts = ${res.data}`);
+    return res.data;
+  } catch (err) {
+    console.log("Error fetching marked gifts.");
+  }
+}
+
 /** PATCH baseUrl/gifts/{gift_id} -> GiftPublic
  *
  * Toggles whether the gift has been marked by another user.
