@@ -12,7 +12,7 @@ export async function loader() {
 export default function MyWishlist() {
   const gifts = useLoaderData();
 
-  const sendToService = async (gdata, service_name) => {
+  const exportService = async (gdata, service_name) => {
     try {
       const gjson = gdata.map((g) => {
         return { what: g.what, link: g.link, details: g.details };
@@ -73,7 +73,7 @@ export default function MyWishlist() {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              sendToService(gifts, "csv");
+              exportService(gifts, "csv");
             }}
           >
             Export to CSV
@@ -85,7 +85,7 @@ export default function MyWishlist() {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              sendToService(gifts, "text");
+              exportService(gifts, "text");
             }}
           >
             Export to Plain Text
