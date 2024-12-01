@@ -3,31 +3,5 @@
 With Node installed in your environment, run ~pnpm install~ to install the necessary libraries.
 Then a dev build can be run with ~pnpm run dev~.
 Of course, ~npm~ works just as well as ~pnpm~.
-** TODOs
-*** TODO Registration page
-*** TODO Login page
-*** TODO Authentication
-*** TODO Convert data from local storage to backend microservice
-*** DONE Design basic layout
-*** DONE Sketch out React and Router skeleton
-*** DONE Landing page
-*** DONE Navigation section
-*** DONE wish list components
-**** DONE list items
-**** DONE clickable details
-*** DONE View of another user's wish list
-**** DONE markable
-**** DONE show uncheckable marks by other users
-*** DONE View of one's own wish list
-**** DONE add item
-**** DONE edit item
-**** DONE delete item
-***** DONE modal confirmation
-*** DONE Change display name
-*** DONE Add support for product URLs
-***** DONE Input form to add a link to purchase.
-***** DONE Input form to edit a link.
-*** DONE Search wishlist names
 ** Acknowledgements
-
 The code structure and visual design takes as its starting point the [[https://reactrouter.com/en/main/start/tutorial][React Router tutorial]].
