@@ -1,8 +1,6 @@
-import axios from "axios";
+import api from "../api";
 
-import { Form, Link, redirect } from "react-router-dom";
-
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { Form, redirect } from "react-router-dom";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -13,18 +11,23 @@ export async function action({ request }) {
 
   const regCode = formData.get("regCode");
 
-  const regApi = axios.create({
-    baseURL: import.meta.env.VITE_API_URL, // sets URL in .env variable
-  });
+  try {
+    await api.post("/users/register", {
+      display_name: displayName,
+      email,
+      password,
+      reg_code: regCode,
+    });
+  } catch (err) {
+    if (err.response.status === 400) {
+      alert(err.response.data.detail);
+      return redirect("/register");
+    }
+    alert("Something went wrong.");
+    console.log("Error: ", err);
+  }
 
-  await regApi.post("/users/register", {
-    display_name: displayName,
-    email,
-    password,
-    reg_code: regCode,
-  });
-
-  return redirect("/");
+  return redirect("/login");
 }
 
 export default function Register() {
