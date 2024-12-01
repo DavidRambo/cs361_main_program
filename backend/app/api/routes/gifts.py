@@ -11,6 +11,7 @@ from app.models import (
     GiftsPublic,
     GiftForOwner,
     GiftsForOwner,
+    GiftsMarkedByOwner,
     Message,
 )
 from app.api.deps import CurrentUser, SessionDep
@@ -39,6 +40,24 @@ def get_wishlist(session: SessionDep, current_user: CurrentUser, user_id: int):
     statement = sqlmodel.select(Gift).where(Gift.owner_id == user_id)
     gifts = session.exec(statement).all()
     return GiftsPublic(data=gifts)
+
+
+@router.get("/marked", response_model=GiftsMarkedByOwner)
+def get_marked_gifts(session: SessionDep, current_user: CurrentUser):
+    """Gets all the gifts the current user has marked on others' wish lists."""
+    statement = sqlmodel.select(Gift).where(Gift.marked_by == current_user.id)
+    gifts: list[Gift] = session.exec(statement).all()
+
+    # Convert list of gifts into a mapping from their owners.
+    marked_gifts: dict[str, list[GiftForOwner]] = {}
+    for gift in gifts:
+        name: str = gift.owner.display_name
+        if name in marked_gifts:
+            marked_gifts[name].append(gift)
+        else:
+            marked_gifts[name] = [gift]
+
+    return GiftsMarkedByOwner(data=marked_gifts)
 
 
 @router.get("/{gift_id}", response_model=GiftPublic)

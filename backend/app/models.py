@@ -177,6 +177,12 @@ class GiftsForOwner(SQLModel):
     # count: int
 
 
+class GiftsMarkedByOwner(SQLModel):
+    """A list of gifts with properties to show to the user who has marked them."""
+
+    data: dict[str, list[GiftForOwner]]
+
+
 class Message(SQLModel):
     message: str
 
