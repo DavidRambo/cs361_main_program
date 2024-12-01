@@ -98,11 +98,11 @@ def read_user_by_id(user_id: int, session: SessionDep, current_user: CurrentUser
     return user
 
 
-@router.delete("/{user_id}")
+@router.delete("/me")
 def delete_user(
     session: SessionDep, current_user: CurrentUser, user_id: int
 ) -> Message:
-    """Delete a user."""
+    """Delete one's own user account."""
     user = session.get(User, user_id)
     if not user:
         raise fastapi.HTTPException(status_code=404, detail="User not found.")
@@ -115,7 +115,7 @@ def delete_user(
     statement = sqlmodel.delete(Gift).where(sqlmodel.col(Gift.owner_id) == user_id)
     session.exec(statement)  # type: ignore
 
-    session.delete(user)
+    session.delete(current_user)
     session.commit()
 
     return Message(message="User and their wish list deleted.")
