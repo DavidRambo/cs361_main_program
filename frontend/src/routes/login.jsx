@@ -10,10 +10,14 @@ export async function action({ request }) {
   oauthData.append("username", formData.get("email"));
   oauthData.append("password", formData.get("password"));
 
-  const res = await api.post("/login/access-token", oauthData);
+  try {
+    const res = await api.post("/login/access-token", oauthData);
 
-  localStorage.setItem(ACCESS_TOKEN, res.data.access_token);
-  localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+    localStorage.setItem(ACCESS_TOKEN, res.data.access_token);
+    localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+  } catch (err) {
+    alert("Login failed.");
+  }
 
   return redirect("/");
 }
