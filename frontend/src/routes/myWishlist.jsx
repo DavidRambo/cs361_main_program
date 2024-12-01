@@ -23,7 +23,6 @@ export default function MyWishlist() {
         output.data = res.data;
       } else if (service_name === "text") {
         const data = { data: gjson };
-        console.log(data);
         const res = await text_api.post("parse-wishlist", data);
         output.data = res.data.text;
       } else {
