@@ -115,23 +115,6 @@ export async function getOwnGift(id) {
   }
 }
 
-/** Returns a list of other users' ids and displayNames.
- *
- * @param {Number} myId primary key of the logged-in user
- * @param {String} search string to match with user name
- * @returns {JSON array} array of objects comprising the id
- *   and displayName of users other than the logged-in user
- */
-export async function getPeople(myId, search) {
-  const people = await getPeopleData();
-  let otherPeople = people.filter((person) => person.id != myId);
-  if (!otherPeople) otherPeople = [];
-  if (search) {
-    otherPeople = matchSorter(otherPeople, search, { keys: ["displayName"] });
-  }
-  return otherPeople;
-}
-
 /** GET baseUrl/gifts/{user_id}/wishlist -> JSON array of GiftsPublic
  *
  * @param {any} personId id of the user whose wish list is being retrieved
