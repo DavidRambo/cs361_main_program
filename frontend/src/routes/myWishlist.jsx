@@ -91,19 +91,35 @@ export default function MyWishlist() {
         ))}
       </ul>
 
-      <ul id="my-wishlist-buttons">
-        <li>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              exportService(gifts, "csv");
-            }}
-          >
-            Export to CSV
-          </button>
-        </li>
+      {gifts.length > 0 ? (
+        <ul id="my-wishlist-buttons">
+          <li>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                exportService(gifts, "csv");
+              }}
+            >
+              Export to CSV
+            </button>
+          </li>
 
+          <li>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                exportService(gifts, "text");
+              }}
+            >
+              Export to Plain Text
+            </button>
+          </li>
+        </ul>
+      ) : (
+        <br />
+      )}
         <li>
           <button
             type="button"
