@@ -185,6 +185,10 @@ export async function createGift(newGift) {
   }
 }
 
+/** Receives an array of new gift idea data and calls createGift for each.
+ *
+ * @param {any} gifts JSON array of gift data
+ */
 export async function createGiftsFromArray(gifts) {
   for (const gift of gifts) {
     const _ = await createGift(gift);
