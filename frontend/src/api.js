@@ -23,8 +23,4 @@ export const csv_api = axios.create({
   baseURL: "http://localhost:3000/",
 });
 
-export const text_api = axios.create({
-  baseURL: "http://localhost:8001/",
-});
-
 export default api;
