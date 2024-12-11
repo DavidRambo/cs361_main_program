@@ -35,7 +35,7 @@ export async function getUser(userId) {
  */
 export async function getUsers(search) {
   try {
-    const res = await api.get("/users");
+    const res = await api.get("/users/");
     if (search) {
       return matchSorter(res.data.data, search, { keys: ["display_name"] });
     } else {
