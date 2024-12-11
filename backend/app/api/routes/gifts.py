@@ -4,6 +4,7 @@ import fastapi
 import sqlmodel
 
 from app.models import (
+    InputText,
     Gift,
     GiftCreate,
     GiftUpdate,
@@ -11,11 +12,13 @@ from app.models import (
     GiftsPublic,
     GiftForOwner,
     GiftsForOwner,
+    GiftsList,
     GiftsMarkedByOwner,
     Message,
 )
 from app.api.deps import CurrentUser, SessionDep
 
+import app.utils
 
 router = fastapi.APIRouter(prefix="/gifts", tags=["gifts"])
 
@@ -44,6 +47,17 @@ def get_marked_gifts(session: SessionDep, current_user: CurrentUser):
             marked_gifts[name] = [gift]
 
     return GiftsMarkedByOwner(data=marked_gifts)
+
+
+@router.post("/parse-text", response_model=GiftsList)
+def parse_text(text: InputText):
+    if len(text.text) == 0:
+        raise fastapi.HTTPException(
+            status_code=fastapi.status.HTTP_400_BAD_REQUEST,
+            detail="Empty request body.",
+        )
+
+    return GiftsList(data=app.utils.parse_text(text.text))
 
 
 @router.get("/{user_id}/wishlist", response_model=GiftsPublic)

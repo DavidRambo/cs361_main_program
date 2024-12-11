@@ -183,6 +183,26 @@ class GiftsMarkedByOwner(BaseModel):
     data: dict[str, list[GiftForOwner]]
 
 
+class GiftsList(BaseModel):
+    """Represents a JSON array of gift ideas parsed from user input.
+
+    Attributes:
+        data: a JSON array in which the objects conform to the ParsedGift model
+    """
+
+    data: list[GiftBase]
+
+
+class InputText(BaseModel):
+    """Represents the data to be received from the client.
+
+    Attributes:
+        text: a string in which gift ideas are separated by a blank line
+    """
+
+    text: str
+
+
 class Message(SQLModel):
     message: str
 
