@@ -4,7 +4,7 @@ from typing import Annotated
 
 import sqlmodel
 
-from pydantic import AfterValidator, AnyUrl, EmailStr
+from pydantic import AfterValidator, AnyUrl, BaseModel, EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
 UrlStr = Annotated[AnyUrl, AfterValidator(str)]
@@ -172,12 +172,12 @@ class GiftsPublic(SQLModel):
     # count: int
 
 
-class GiftsForOwner(SQLModel):
+class GiftsForOwner(BaseModel):
     data: list[GiftForOwner]
     # count: int
 
 
-class GiftsMarkedByOwner(SQLModel):
+class GiftsMarkedByOwner(BaseModel):
     """A list of gifts with properties to show to the user who has marked them."""
 
     data: dict[str, list[GiftForOwner]]
