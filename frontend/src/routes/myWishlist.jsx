@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import MyItem from "../components/myItem";
 
 import { getMyWishlist } from "../fetchers";
-import { csv_api, text_api } from "../api";
+import api, { csv_api } from "../api";
 
 export async function loader() {
   return await getMyWishlist();
@@ -24,7 +24,7 @@ export default function MyWishlist() {
         output.data = res.data;
       } else if (service_name === "text") {
         const data = { data: gjson };
-        const res = await text_api.post("parse-wishlist", data);
+        const res = await api.post("/gifts/parse-wishlist", data);
         output.data = res.data.text;
       } else {
         console.log("No service by that name.");
