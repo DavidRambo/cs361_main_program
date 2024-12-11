@@ -167,10 +167,6 @@ export async function getGift(itemId) {
   }
 }
 
-export async function getMyId() {
-  return 1;
-}
-
 /** POST baseUrl/gifts/me -> GiftForOwner
  *
  * Request body: JSON with `what` and optionally `link` and `details`
