@@ -1,6 +1,6 @@
 import { Form, redirect, useNavigate } from "react-router-dom";
 
-import { text_api } from "../api";
+import api from "../api";
 import { createGiftsFromArray } from "../fetchers";
 
 export async function action({ request }) {
@@ -13,7 +13,7 @@ export async function action({ request }) {
   }
 
   try {
-    const res = await text_api.post("parse-text", entries);
+    const res = await api.post("/gifts/parse-text", entries);
     await createGiftsFromArray(res.data.data);
   } catch (err) {
     alert("Something went wrong.");
