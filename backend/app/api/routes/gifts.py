@@ -28,20 +28,6 @@ def get_own_wishlist(session: SessionDep, current_user: CurrentUser):
     return GiftsForOwner(data=gifts)
 
 
-@router.get("/{user_id}/wishlist", response_model=GiftsPublic)
-def get_wishlist(session: SessionDep, current_user: CurrentUser, user_id: int):
-    """Gets a user's wishlist for the logged-in user to view."""
-    if current_user.id == user_id:
-        raise fastapi.HTTPException(
-            status_code=fastapi.status.HTTP_403_FORBIDDEN,
-            detail="You cannot view your own wish list in this way.",
-        )
-
-    statement = sqlmodel.select(Gift).where(Gift.owner_id == user_id)
-    gifts = session.exec(statement).all()
-    return GiftsPublic(data=gifts)
-
-
 @router.get("/marked", response_model=GiftsMarkedByOwner)
 def get_marked_gifts(session: SessionDep, current_user: CurrentUser):
     """Gets all the gifts the current user has marked on others' wish lists."""
@@ -58,6 +44,20 @@ def get_marked_gifts(session: SessionDep, current_user: CurrentUser):
             marked_gifts[name] = [gift]
 
     return GiftsMarkedByOwner(data=marked_gifts)
+
+
+@router.get("/{user_id}/wishlist", response_model=GiftsPublic)
+def get_wishlist(session: SessionDep, current_user: CurrentUser, user_id: int):
+    """Gets a user's wishlist for the logged-in user to view."""
+    if current_user.id == user_id:
+        raise fastapi.HTTPException(
+            status_code=fastapi.status.HTTP_403_FORBIDDEN,
+            detail="You cannot view your own wish list in this way.",
+        )
+
+    statement = sqlmodel.select(Gift).where(Gift.owner_id == user_id)
+    gifts = session.exec(statement).all()
+    return GiftsPublic(data=gifts)
 
 
 @router.get("/{gift_id}", response_model=GiftPublic)
