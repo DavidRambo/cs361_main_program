@@ -216,12 +216,3 @@ export async function deleteGift(giftId) {
     console.log("Failed to delete item. Error: ", err);
   }
 }
-
-export async function convertToCSV(gifts) {
-  try {
-    const res = await csv_api.post("convert-to-csv", gifts);
-    console.log(res);
-  } catch (err) {
-    console.log("Error converting wish list to CSV.");
-  }
-}
