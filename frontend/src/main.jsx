@@ -25,7 +25,6 @@ import EditItem, {
   loader as editItemLoader,
 } from "./routes/editItem";
 import { action as deleteAction } from "./routes/delete";
-import AddByCSV, { action as uploadCSVAction } from "./routes/addByCSV";
 import AddBulkText, { action as bulkTextAction } from "./routes/addBulkText";
 
 function Logout() {
@@ -76,11 +75,6 @@ const router = createBrowserRouter([
             path: "/mywishlist/add",
             element: <AddItem />,
             action: addItemAction,
-          },
-          {
-            path: "/mywishlist/csv-upload",
-            element: <AddByCSV />,
-            action: uploadCSVAction,
           },
           {
             path: "/mywishlist/bulk-text-upload",

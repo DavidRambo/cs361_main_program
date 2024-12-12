@@ -60,6 +60,14 @@ def parse_text(text: InputText):
     return GiftsList(data=app.utils.parse_text(text.text))
 
 
+@router.post("/parse-wishlist", response_model=InputText)
+def parse_wishlist(wishlist: GiftsList):
+    if len(wishlist.data) == 0:
+        return InputText(text="Your wish list is empty.")
+    data = [dict(g) for g in wishlist.data]
+    return InputText(text=app.utils.parse_json(data))
+
+
 @router.get("/{user_id}/wishlist", response_model=GiftsPublic)
 def get_wishlist(session: SessionDep, current_user: CurrentUser, user_id: int):
     """Gets a user's wishlist for the logged-in user to view."""
