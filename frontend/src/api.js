@@ -27,8 +27,4 @@ export const text_api = axios.create({
   baseURL: "http://localhost:8001/",
 });
 
-export const email_api = axios.create({
-  baseURL: "http://localhost:8002/",
-});
-
 export default api;

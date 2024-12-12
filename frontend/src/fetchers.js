@@ -35,7 +35,7 @@ export async function getUser(userId) {
  */
 export async function getUsers(search) {
   try {
-    const res = await api.get("/users");
+    const res = await api.get("/users/");
     if (search) {
       return matchSorter(res.data.data, search, { keys: ["display_name"] });
     } else {
@@ -167,10 +167,6 @@ export async function getGift(itemId) {
   }
 }
 
-export async function getMyId() {
-  return 1;
-}
-
 /** POST baseUrl/gifts/me -> GiftForOwner
  *
  * Request body: JSON with `what` and optionally `link` and `details`
@@ -189,6 +185,10 @@ export async function createGift(newGift) {
   }
 }
 
+/** Receives an array of new gift idea data and calls createGift for each.
+ *
+ * @param {any} gifts JSON array of gift data
+ */
 export async function createGiftsFromArray(gifts) {
   for (const gift of gifts) {
     const _ = await createGift(gift);
