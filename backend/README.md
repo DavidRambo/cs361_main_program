@@ -76,3 +76,23 @@ The parser always treats the first line of a new paragraph as the "what".
 It will determine whether the next additional non-blank line begins with "https://".
 The rest of the lines will be included as details.
 Thus, URLs may be included in the details portion of the gift idea as plain text.
+
+#### Parsing a Wish List into Text
+
+- Endpoint: `/gifts/parse-wishlist`
+- Method: POST
+
+The service also provides a route by which to convert a JSON array of gifts into plain text.
+
+`POST http://localhost:8000/parse-json`
+
+Since this is the reverse of the `parse-text` route, the request body should include an object with a key of `data` that has a value of the JSON array wish list.
+It will return a JSON schema in the form:
+
+```json
+{
+  "text": "A gift idea."
+}
+```
+
+Thus, to extract the text in a Fetch API response, use `response.data.text`.
